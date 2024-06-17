@@ -1,7 +1,8 @@
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.ext.hybrid import hybrid_property
 
-from config import db
+from config import db, bcrypt
 
 class Student(db.Model, SerializerMixin):
     __tablename__ = "students"
@@ -25,7 +26,7 @@ class Accommodation(db.Model, SerializerMixin):
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
 
     student = db.relationship('Student', backref='accommodations')
-    comments = db.relatinship('Comment', backref="accomodation")
+    comments = db.relationship('Comment', backref="accomodation")
 
 class Comment(db.Model, SerializerMixin):
     __tablename__ = "comments"
@@ -43,3 +44,16 @@ class User(db.Model, SerializerMixin):
     _password_hash = db.Column(db.String)
 
     students = db.relationship('Student', backref='user')
+
+    @hybrid_property
+    def password_hash(self):
+        raise AttributeError("Password hash is not a readable attribute.")
+
+    @password_hash.setter
+    def password_hash(self, password):
+        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+        self._password_hash = password_hash.decode('utf-8')
+    
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(
+            self._password_hash, password.encode('utf-8'))
