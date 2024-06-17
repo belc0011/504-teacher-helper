@@ -35,7 +35,7 @@ function Login( {onLogin} ) {
     return (
         <div>
             <main>
-                <h1>Add a New Contact</h1>
+                <h1>Sign In</h1>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="username">Username</label>
                     <div>

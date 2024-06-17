@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Remote library imports
-from flask import request, session, make_response
+from flask import request, session, make_response, jsonify
 from flask_restful import Resource
 
 # Local imports
@@ -42,7 +42,7 @@ class Login(Resource):
 class CheckSession(Resource):
     def get(self):
         if session['user_id']:
-            user = User.query.filter_by(id=session['user_id']).first()
+            user = User.query.filter_by(id=session.get('user_id')).first()
             response = make_response(user.to_dict(), 200)
             return response
         else:
@@ -59,7 +59,7 @@ class Logout(Resource):
 class StudentList(Resource):
     def get(self):
         if session['user_id']:
-            students = Student.query.filter_by(user_id=session['user_id']).all()
+            students = Student.query.filter_by(user_id=session.get('user_id')).all()
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')

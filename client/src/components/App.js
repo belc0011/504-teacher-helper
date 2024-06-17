@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     // auto-login
-    fetch("/check_session").then((r) => {
+    fetch("http://127.0.0.1:5555/check_session").then((r) => {
       if (r.ok) {
         (r => r.json())
         .then((user) => setUser(user));
