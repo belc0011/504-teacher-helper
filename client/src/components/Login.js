@@ -3,7 +3,7 @@ import React, { useState } from "react";
 function Login( {onLogin} ) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(False)
+    const [error, setError] = useState(false)
 
     function handleSubmit(e) {
         e.preventdefault()
@@ -16,11 +16,10 @@ function Login( {onLogin} ) {
         })
         .then(res => {
             if (res.ok) {
-                res => res.json()
-                .then(user => onLogin(user))
+                res.json().then(user => onLogin(user))
             }
             else {
-                setError(True)
+                setError(true)
             }
         })
     }
