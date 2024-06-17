@@ -49,6 +49,10 @@ function Login( {onLogin} ) {
                         <p></p>
                         <button type="submit">Submit</button>
                     </div>
+                    <p>Or, if you don't have an account...</p>
+                    <div>
+                        <button>Sign Up</button>
+                    </div>
                 </form>
             </main>
         </div>
