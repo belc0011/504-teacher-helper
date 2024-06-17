@@ -10,9 +10,10 @@ class Student(db.Model, SerializerMixin):
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     grade = db.Column(db.Integer)
-    
-    accommodations = db.relationship('Accommodation', backref='student')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    accommodations = db.relationship('Accommodation', backref='student')
+    user = db.relationship('User', backref='students')
     def repr(self):
         return f'{self.last_name}, {self.first_name} in grade {self.grade}'
 
@@ -33,3 +34,12 @@ class Comment(db.Model, SerializerMixin):
     accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
 
     accommodation = db.relationship('Accommodation', backref='comments')
+
+class User(db.Model, SerializerMixin):
+    __tablename__ = "users"
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String)
+    _password_hash = db.Column(db.String)
+
+    students = db.relationship('Student', backref='user')
