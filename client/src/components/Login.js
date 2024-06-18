@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'
 import SignUp from './SignUp'
 import Home from './Home'
 function Login( {onLogin} ) {
@@ -6,6 +7,7 @@ function Login( {onLogin} ) {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false)
     const [showComponent, setShowComponent] = useState(false);
+    const history = useHistory()
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -19,6 +21,7 @@ function Login( {onLogin} ) {
         .then(res => {
             if (res.ok) {
                 res.json().then(user => onLogin(user))
+                history.push("/home")
             }
             else {
                 setError(true)
