@@ -22,32 +22,32 @@ function App() {
       .then((user) => setUser(user))
       .catch((error) => console.error('There was a problem with the fetch operation:', error));
   }, []);
-
-  if (!user) return <Login onLogin={setUser} />;
-
-  return (
-    <>
-    <Router>
-      <NavBar user={user} setUser={setUser} />
-        <main>
-          <Switch>
-            <Route path="/">
-              <Home />
-            </Route>
-            <Route path='/signup'>
-              <SignUp />
-            </Route>
-            <Route path="/students">
-              <Students />
-            </Route>
-            <Route path="/logout">
-              <Login />
-            </Route>
-          </Switch>
-        </main>
-      </Router>
-    </>
-  );
-}
-
-export default App;
+  
+    return (
+      <>
+        {user ? (
+          <Router>
+            <NavBar user={user} setUser={setUser} />
+            <main>
+              <Switch>
+                <Route exact path="/">
+                  <Home />
+                </Route>
+                <Route path='/signup'>
+                  <SignUp />
+                </Route>
+                <Route path="/students">
+                  <Students />
+                </Route>
+                {/* No need for a separate /logout route, handle logout logic in NavBar */}
+              </Switch>
+            </main>
+          </Router>
+        ) : (
+          <Login onLogin={setUser} />
+        )}
+      </>
+    );
+  }
+  
+  export default App;

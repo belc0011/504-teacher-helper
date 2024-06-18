@@ -52,13 +52,9 @@ class CheckSession(Resource):
         
 class Logout(Resource):
     def delete(self):
-        print("PRINT STATEMENT:******", session)
-        if session.get('user_id'):
-            print("PRINT STATEMENT*******, inside if")
-            session['user_id'] = None
-            return {}, 204
-        else:
-            return {'message': 'Error, not currently logged in'}, 401
+        session.get('user_id')
+        session['user_id'] = None
+        return {}, 204
 
 class StudentList(Resource):
     def get(self):
