@@ -16,9 +16,9 @@ class Signup(Resource):
     def post(self):
         request_dict = request.get_json()
         new_user = User(
-                username=request_dict['username'], 
-                image_url=request_dict['image_url'], 
-                bio=request_dict['bio'])
+                first_name=request_dict['first_name'],
+                last_name=request.dict(['last_name']),
+                username=request_dict['username'])
         new_user.password_hash = request_dict['password']
         
         db.session.add(new_user)
@@ -41,7 +41,7 @@ class Login(Resource):
 
 class CheckSession(Resource):
     def get(self):
-        if session['user_id']:
+        if session.get('user_id'):
             user = User.query.filter_by(id=session.get('user_id')).first()
             response = make_response(user.to_dict(), 200)
             return response

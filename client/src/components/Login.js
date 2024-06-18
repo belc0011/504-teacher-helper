@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import SignUp from './SignUp'
 
 function Login( {onLogin} ) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false)
+    const [showComponent, setShowComponent] = useState(false);
 
     function handleSubmit(e) {
         e.preventdefault()
@@ -22,6 +24,9 @@ function Login( {onLogin} ) {
                 setError(true)
             }
         })
+    }
+    function handleClick() {
+        setShowComponent(true); // Set showComponent to true when the button is clicked
     }
 
     function handleUsername(e) {
@@ -49,11 +54,12 @@ function Login( {onLogin} ) {
                         <p></p>
                         <button type="submit">Submit</button>
                     </div>
-                    <p>Or, if you don't have an account...</p>
-                    <div>
-                        <button>Sign Up</button>
-                    </div>
                 </form>
+                <p>Or, if you don't have an account...</p>
+                    <div>
+                        <button onClick={handleClick}>Sign Up</button>
+                        {showComponent && <SignUp/>}
+                    </div>
             </main>
         </div>
     )

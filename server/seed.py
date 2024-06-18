@@ -28,6 +28,8 @@ if __name__ == '__main__':
             last_name="Smith", 
             grade=10)
         user1 = User(
+            first_name="Jenny",
+            last_name="Goodwinn",
             username="becky", 
             _password_hash="goodhair")
 

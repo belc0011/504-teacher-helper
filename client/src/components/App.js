@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import Login from './Login'
 import NavBar from './NavBar'
 import Students from './Students'
+import SignUp from './SignUp'
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,6 +27,9 @@ function App() {
         <Switch>
           <Route path="/">
             <Students />
+          </Route>
+          <Route path='/signup'>
+            <SignUp />
           </Route>
         </Switch>
       </main>

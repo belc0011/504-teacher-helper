@@ -41,7 +41,9 @@ class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String)
+    first_name = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False)
+    username = db.Column(db.String, nullable=False)
     _password_hash = db.Column(db.String)
 
     students = db.relationship('Student', back_populates='user')
