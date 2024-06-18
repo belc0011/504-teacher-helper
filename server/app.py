@@ -15,9 +15,10 @@ from models import User, Accommodation, Student, Comment
 class Signup(Resource):
     def post(self):
         request_dict = request.get_json()
+        print("PRINT:", request_dict)
         new_user = User(
-                first_name=request_dict['first_name'],
-                last_name=request.dict(['last_name']),
+                first_name=request_dict['first_name'].title(),
+                last_name=request_dict['last_name'].title(),
                 username=request_dict['username'])
         new_user.password_hash = request_dict['password']
         
@@ -50,7 +51,7 @@ class CheckSession(Resource):
         
 class Logout(Resource):
     def delete(self):
-        if session['user_id']:
+        if session.get('user_id'):
             session['user_id'] = None
             return {}, 204
         else:
@@ -58,16 +59,19 @@ class Logout(Resource):
 
 class StudentList(Resource):
     def get(self):
-        if session['user_id']:
+        if session.get('user_id'):
             students = Student.query.filter_by(user_id=session.get('user_id')).all()
 
+class Home(Resource):
+    def get(self):
+        return {}, 200
 
 api.add_resource(Signup, '/signup', endpoint='signup')
-api.add_resource(Login, '/login', endpoint='login')
+api.add_resource(Login, '/', endpoint='')
 api.add_resource(Logout, '/logout', endpoint='logout')
-api.add_resource(StudentList, '/', endpoint='')
+api.add_resource(StudentList, '/students', endpoint='students')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
-
+api.add_resource(Home, '/home', endpoint='home')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

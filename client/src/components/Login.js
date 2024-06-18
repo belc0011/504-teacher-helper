@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import SignUp from './SignUp'
-
+import Home from './Home'
 function Login( {onLogin} ) {
-    const [username, setUsername] = useState("");
+    const [userName, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false)
     const [showComponent, setShowComponent] = useState(false);
 
     function handleSubmit(e) {
-        e.preventdefault()
-        fetch("http://127.0.0.1:5555/login", {
+        e.preventDefault()
+        fetch("http://127.0.0.1:5555", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username: userName, password: password })
         })
         .then(res => {
             if (res.ok) {
@@ -44,7 +44,7 @@ function Login( {onLogin} ) {
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="username">Username</label>
                     <div>
-                        <input type="text" placeholder="Username" id="username" value={username} onChange={handleUsername}/>
+                        <input type="text" placeholder="Username" id="username" value={userName} onChange={handleUsername}/>
                     </div>
                     <label htmlFor="password">Password</label>
                     <div>
@@ -58,7 +58,7 @@ function Login( {onLogin} ) {
                 <p>Or, if you don't have an account...</p>
                     <div>
                         <button onClick={handleClick}>Sign Up</button>
-                        {showComponent && <SignUp/>}
+                        {showComponent && <SignUp onLogin={onLogin} setError={setError} error={error}/>}
                     </div>
             </main>
         </div>

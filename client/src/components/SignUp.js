@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 
-function SignUp() {
+function SignUp({ onLogin, error, setError }) {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [userName, setUserName] = useState("")
@@ -20,8 +20,22 @@ function SignUp() {
         setPassword(e.target.value)
     }
     function handleSubmit(e) {
-        e.preventdefault()
-
+        e.preventDefault()
+        fetch("http://127.0.0.1:5555/signup", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ first_name: firstName, last_name: lastName, username: userName, password: password })
+        })
+        .then(res => {
+            if (res.ok) {
+                res.json().then(user => onLogin(user))
+            }
+            else {
+                console.log("error: " + res)
+            }
+        })
     }
     return (
     <div>
