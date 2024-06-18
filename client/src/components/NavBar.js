@@ -17,6 +17,9 @@ function NavBar({ user, setUser }) {
             <div>
                 <NavLink to="/" className="nav-link">Home</NavLink>
             </div>
+            <div>
+                <NavLink to="/logout" className="nav-link" onClick={handleLogoutClick}>Logout</NavLink>
+            </div>
         </nav>
     );
   }

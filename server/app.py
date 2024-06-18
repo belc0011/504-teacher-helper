@@ -32,8 +32,9 @@ class Login(Resource):
     def post(self):
         request_dict = request.get_json()
         user = User.query.filter_by(username=request_dict['username']).first()
-        if user.authenticate:
+        if user and user.authenticate(request_dict['password']):
             user_dict = user.to_dict()
+            print("PRINT STATEMENT:", user_dict)
             session['user_id'] = user.id
             response = make_response(user_dict, 200)
             return response
@@ -51,7 +52,9 @@ class CheckSession(Resource):
         
 class Logout(Resource):
     def delete(self):
+        print("PRINT STATEMENT:******", session)
         if session.get('user_id'):
+            print("PRINT STATEMENT*******, inside if")
             session['user_id'] = None
             return {}, 204
         else:

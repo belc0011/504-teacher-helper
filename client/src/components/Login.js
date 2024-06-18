@@ -48,7 +48,7 @@ function Login( {onLogin} ) {
                     </div>
                     <label htmlFor="password">Password</label>
                     <div>
-                        <input type="text" placeholder="Password" id="password" value={password} onChange={handlePassword}/>
+                        <input type="password" id="password" value={password} onChange={handlePassword}/>
                     </div>
                     <div>
                         <p></p>

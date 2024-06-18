@@ -11,12 +11,16 @@ function App() {
 
   useEffect(() => {
     // auto-login
-    fetch("http://127.0.0.1:5555/check_session").then((r) => {
-      if (r.ok) {
-        (r => r.json())
-        .then((user) => setUser(user));
-      }
-    });
+    fetch("http://127.0.0.1:5555/check_session")
+      .then((r) => {
+        if (r.ok) {
+          return r.json();
+        } else {
+          throw new Error('Network response was not ok.');
+        }
+      })
+      .then((user) => setUser(user))
+      .catch((error) => console.error('There was a problem with the fetch operation:', error));
   }, []);
 
   if (!user) return <Login onLogin={setUser} />;
@@ -35,6 +39,9 @@ function App() {
             </Route>
             <Route path="/students">
               <Students />
+            </Route>
+            <Route path="/logout">
+              <Login />
             </Route>
           </Switch>
         </main>
