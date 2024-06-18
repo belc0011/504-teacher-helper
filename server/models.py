@@ -7,14 +7,15 @@ from config import db, bcrypt
 class Student(db.Model, SerializerMixin):
     __tablename__ = "students"
 
+    serialize_rules = ('-accommodations.student',)
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     grade = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    accommodations = db.relationship('Accommodation', backref='student')
-    user = db.relationship('User', backref='students')
+    accommodations = db.relationship('Accommodation', back_populates='student')
+    user = db.relationship('User', back_populates='students')
     def repr(self):
         return f'{self.last_name}, {self.first_name} in grade {self.grade}'
 
@@ -25,8 +26,8 @@ class Accommodation(db.Model, SerializerMixin):
     description = db.Column(db.String)
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
 
-    student = db.relationship('Student', backref='accommodations')
-    comments = db.relationship('Comment', backref="accomodation")
+    student = db.relationship('Student', back_populates='accommodations')
+    comments = db.relationship('Comment', back_populates="accommodation")
 
 class Comment(db.Model, SerializerMixin):
     __tablename__ = "comments"
@@ -34,7 +35,7 @@ class Comment(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
 
-    accommodation = db.relationship('Accommodation', backref='comments')
+    accommodation = db.relationship('Accommodation', back_populates='comments')
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
@@ -43,7 +44,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String)
     _password_hash = db.Column(db.String)
 
-    students = db.relationship('Student', backref='user')
+    students = db.relationship('Student', back_populates='user')
 
     @hybrid_property
     def password_hash(self):
