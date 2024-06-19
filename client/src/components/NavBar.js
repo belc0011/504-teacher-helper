@@ -1,27 +1,30 @@
 import React from 'react'
-import { NavLink } from "react-router-dom";
+import { NavLink, Link, useHistory } from "react-router-dom";
 function NavBar({ user, setUser }) {
+    const history = useHistory()
+
     function handleLogoutClick() {
         fetch('/logout', {
             method: 'DELETE'})
         .then(res => {
             if (res.ok) {
-                setUser(null)
+                setUser(null);
+                history.push('/')
             }
-
         })
     }
-  
+    if (user) {
     return (
         <nav>
             <div>
-                <NavLink to="/" className="nav-link">Home</NavLink>
+                <Link to="/" className="nav-link">Home</Link>
             </div>
             <div>
-                <NavLink to="/logout" className="nav-link" onClick={handleLogoutClick}>Logout</NavLink>
+                <Link to="/login" className="nav-link" onClick={handleLogoutClick}>Logout</Link>
             </div>
         </nav>
     );
   }
+}
 
   export default NavBar

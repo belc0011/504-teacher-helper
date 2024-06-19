@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useHistory } from 'react-router-dom';
 import Login from './Login'
 import NavBar from './NavBar'
 import Students from './Students'
 import SignUp from './SignUp'
 import Home from './Home'
-import AddStudent from './AddStudent'
+import StudentPage from './StudentPage'
 
 function App() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(false)
   const [students, setStudents] = useState([])
+  const history = useHistory()
 
   useEffect(() => {
     // auto-login
-    fetch("http://127.0.0.1:5555/check_session")
+    fetch(`http://127.0.0.1:5555/check_session`, {
+      method: "GET",
+      credentials: 'include'
+      })
       .then((r) => {
         if (r.ok) {
           return r.json();
