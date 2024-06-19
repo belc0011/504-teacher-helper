@@ -36,9 +36,7 @@ class Login(Resource):
         if user and user.authenticate(request_dict['password']):
             user_dict = user.to_dict()
             session['user_id'] = user.id
-            print("PRINTING SESSION OBJECT1:", session)
             response = make_response(user_dict, 200)
-            print("PRINTING SESSION OBJECT AGAIN:", session)
             return response
         else:
             return {'message': 'Incorrect username or password'}, 401
@@ -97,7 +95,27 @@ class StudentByName(Resource):
                 return {'message': 'Student not found'}, 404
         else:
             return {'message': 'Error, unauthorized user'}, 401
-        
+
+class AddStudent(Resource):
+    def post(self):
+        print("inside AddStudent")
+        if session.get('user_id'):
+            print("insidse if statement")
+            user_id = session.get('user_id')
+            new_student = Student(
+                first_name=request['first_name'],
+                last_name=request['last_name'],
+                grade=request['grade'],
+                user_id=user_id
+            )
+            if new_student:
+                db.session.add(new_student)
+                db.session.commit()
+                new_student_dict = new_student.to_dict()
+                response = make_response(new_student_dict, 201)
+                return response
+            else:
+                return {'message': 'Error: unable to create new student'}, 404
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/', endpoint='')
@@ -105,6 +123,7 @@ api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(StudentList, '/students', endpoint='students')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Session, '/get_session_id', endpoint='get_session_id')
+api.add_resource(AddStudent, '/add_student', endpoint='add_student')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=False)

@@ -5,6 +5,7 @@ import NavBar from './NavBar'
 import Students from './Students'
 import SignUp from './SignUp'
 import Home from './Home'
+import AddStudent from './AddStudent'
 
 function App() {
   const [user, setUser] = useState(null);
