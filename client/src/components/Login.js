@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { useHistory } from 'react-router-dom'
 import SignUp from './SignUp'
 import Home from './Home'
-function Login( {onLogin} ) {
+function Login( {onLogin, error, setError} ) {
     const [userName, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState(false)
     const [showComponent, setShowComponent] = useState(false);
     const history = useHistory()
 
@@ -16,12 +15,12 @@ function Login( {onLogin} ) {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username: userName, password: password })
+            body: JSON.stringify({ username: userName, password: password }),
+            credentials: 'include'
         })
         .then(res => {
             if (res.ok) {
                 res.json().then(user => onLogin(user))
-                history.push("/home")
             }
             else {
                 setError(true)

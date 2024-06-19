@@ -8,6 +8,8 @@ import Home from './Home'
 
 function App() {
   const [user, setUser] = useState(null);
+  const [students, setStudents] = useState([])
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     // auto-login
@@ -30,20 +32,20 @@ function App() {
           <NavBar user={user} setUser={setUser} />
           <main>
             <Switch>
-              <Route exact path="/home">
-                <Home />
+              <Route exact path="/">
+                <Home setStudents={setStudents} error={error} setError={setError} user={user}/>
               </Route>
-              <Route path="/signup">
+              <Route exact path="/signup">
                 <SignUp />
               </Route>
-              <Route path="/students">
-                <Students />
+              <Route exact path="/students">
+                <Students students={students} setStudents={setStudents}/>
               </Route>
             </Switch>
           </main>
         </>
       ) : (
-        <Login onLogin={setUser} />
+        <Login onLogin={setUser} error={error} setError={setError}/>
       )}
     </Router>
   );

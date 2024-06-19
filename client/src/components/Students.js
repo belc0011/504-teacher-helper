@@ -1,12 +1,8 @@
 import React from 'react'
 import { useState } from "react";
-import StudentCard from './StudentCard'
+import StudentCard from './StudentCard.js'
 
-function Students() {
-    const [students, setStudents] = useState([])
-    fetch('http://127.0.0.1:5555')
-    .then(res => res.json())
-    .then(students => setStudents(students))
+function Students({ students, setStudents }) {
 
     return (
         <div>

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom'
 
-function Home() {
+function Home({ setStudents, error, setError, user }) {
     const [accommodation, setAccommodation] = useState("")
+    const history = useHistory()
 
     function handleAccommodation(e) {
         setAccommodation(e.target.value)
@@ -9,14 +11,43 @@ function Home() {
 
     function handleSubmit(e) {
         e.preventDefault()
+        console.log(user)
+        fetch(`http://127.0.0.1:5555/students`, {
+            method: "GET",
+            headers: {
+              "Cookie": "cookieName=cookieValue"
+            },
+            credentials: 'include'
+        })
+        .then(res => {
+            if (res.ok) {
+                res.json().then(data => setStudents(data))
+                history.push("/students")
+            }
+            else {
+                setError(true)
+            }
+        })
+        .catch(error => {
+            console.error("Error parsing JSON:", error); // Log JSON parsing errors
+            setError(true)
+        })
+    }
+
+    function handleSubmit2(e) {
+        e.preventDefault()
     }
     return (
         <div>
             <main>
-                <h1>Add a New Contact</h1>
                 <form onSubmit={handleSubmit}>
-                    <h3>Search by student name: </h3>
-                    <input type='text'></input>
+                    <h3>Click here to pull up a list of all students</h3>
+                    <div>
+                        <p></p>
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+                <form onSubmit={handleSubmit2}>
                     <h3>Search by accommodation: </h3>
                     <label htmlFor="group">Group</label>
                     <div>
