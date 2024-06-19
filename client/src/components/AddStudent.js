@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router-dom'
 
-function AddStudent({ setError }) {
+function AddStudent({ setError, students, setStudents }) {
     const [studentFirstName, setStudentFirstName] = useState("")
     const [studentLastName, setStudentLastName] = useState("")
     const [grade, setGrade] = useState("")

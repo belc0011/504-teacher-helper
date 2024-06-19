@@ -67,13 +67,17 @@ class Logout(Resource):
 class StudentList(Resource):
     def get(self):
         session.permanent = True
-
+        print("Here is the user_id: ", session.get('user_id'))
         if session.get('user_id'):
-            # User is logged in, fetch their students
             user_id = session['user_id']
             students = Student.query.filter_by(user_id=user_id).all()
+            print("Here is the results of the query for students: ", students)
             if students:
-                response = make_response(students.to_dict(), 200)
+                student_list = []
+                for student in students:
+                    student_found = student.to_dict()
+                    student_list.append(student_found)
+                response = make_response(student_list, 200)
                 return response
             else:
                 return {'message': 'No students found'}, 404

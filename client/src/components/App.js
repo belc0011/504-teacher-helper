@@ -9,8 +9,8 @@ import AddStudent from './AddStudent'
 
 function App() {
   const [user, setUser] = useState(null);
-  const [students, setStudents] = useState([])
   const [error, setError] = useState(false)
+  const [students, setStudents] = useState([])
 
   useEffect(() => {
     // auto-login
@@ -34,13 +34,13 @@ function App() {
           <main>
             <Switch>
               <Route exact path="/">
-                <Home setStudents={setStudents} error={error} setError={setError} user={user}/>
+                <Home error={error} setError={setError} user={user} students={students} setStudents={setStudents}/>
               </Route>
               <Route exact path="/signup">
                 <SignUp />
               </Route>
               <Route exact path="/students">
-                <Students students={students} setStudents={setStudents}/>
+                <Students setError={setError} students={students} setStudents={setStudents}/>
               </Route>
             </Switch>
           </main>

@@ -1,8 +1,29 @@
 import React from 'react'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StudentCard from './StudentCard.js'
 
-function Students({ students, setStudents }) {
+function Students({ students, setStudents, setError }) {
+    useEffect(() => {
+        fetch(`http://127.0.0.1:5555/students`, {
+        method: "GET",
+        headers: {
+          "Cookie": "cookieName=cookieValue"
+        },
+        credentials: 'include'
+        })
+        .then(res => {
+            if (res.ok) {
+                res.json().then(data => setStudents(data))
+            }
+            else {
+                setError(true)
+            }
+        })
+        .catch(error => {
+            console.error("Error parsing JSON:", error); // Log JSON parsing errors
+            setError(true)
+        })
+    }, [])
 
     return (
         <div>
@@ -11,7 +32,13 @@ function Students({ students, setStudents }) {
                 <div>
                     {students.map(student => {
                         return (
-                            <StudentCard firstName={student.firstName} lastName={student.lastName} grade={student.grade} accommodations={student.accommodations} key={student.id} />
+                            <StudentCard
+                            key={student.id}
+                            firstName={student.first_name}
+                            lastName={student.last_name}
+                            grade={student.grade}
+                            accommodations={student.accommodations}
+                            />
                         )
                     })}
                 </div>

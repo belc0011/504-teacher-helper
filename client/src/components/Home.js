@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
 import AddStudent from './AddStudent'
+import Students from './Students'
 
-function Home({ setStudents, error, setError, user }) {
+function Home({ error, setError, user, students, setStudents }) {
     const [accommodation, setAccommodation] = useState("")
     const [showComponent, setShowComponent] = useState(false);
     const history = useHistory()
@@ -18,36 +19,17 @@ function Home({ setStudents, error, setError, user }) {
     
     function handleSubmit2(e) {
         e.preventDefault()
-        console.log(user)
-        fetch(`http://127.0.0.1:5555/students`, {
-            method: "GET",
-            headers: {
-              "Cookie": "cookieName=cookieValue"
-            },
-            credentials: 'include'
-        })
-        .then(res => {
-            if (res.ok) {
-                res.json().then(data => setStudents(data))
-                history.push("/students")
-            }
-            else {
-                setError(true)
-            }
-        })
-        .catch(error => {
-            console.error("Error parsing JSON:", error); // Log JSON parsing errors
-            setError(true)
-        })
+        history.push('/students')
+        
     }
 
     function handleSubmit3(e) {
         e.preventDefault()
     }
+    if (students.length === 0) {
     return (
         <div>
             <main>
-                
                 <form onSubmit={handleSubmit2}>
                     <h3>Click here to pull up a list of all students</h3>
                     <div>
@@ -80,10 +62,17 @@ function Home({ setStudents, error, setError, user }) {
                         <button type="submit">Add a student</button>
                     </div>
                 </form>
-                {showComponent && <AddStudent setError={setError} error={error}/>}
+                {showComponent && <AddStudent students={students} setStudents={setStudents} setError={setError} error={error}/>}
             </main>
         </div>
-    )
+            )} 
+    else {
+        return (
+            <div>
+                <Students students={students} setStudents={setStudents}/>
+            </div>
+        )
+    }
 }
 
 export default Home
