@@ -15,6 +15,7 @@ function Home({ setStudents, error, setError, user }) {
         e.preventDefault()
         setShowComponent(true)
     }
+    
     function handleSubmit2(e) {
         e.preventDefault()
         console.log(user)
@@ -46,13 +47,7 @@ function Home({ setStudents, error, setError, user }) {
     return (
         <div>
             <main>
-                <form onSubmit={handleSubmit}>
-                <h3>Click here to add a student</h3>
-                    <div>
-                        <p></p>
-                        <button type="submit">Add a student</button>
-                    </div>
-                </form>
+                
                 <form onSubmit={handleSubmit2}>
                     <h3>Click here to pull up a list of all students</h3>
                     <div>
@@ -76,6 +71,13 @@ function Home({ setStudents, error, setError, user }) {
                     <div>
                         <p></p>
                         <button type="submit">Submit</button>
+                    </div>
+                </form>
+                <form onSubmit={handleSubmit}>
+                <h3>Click here to add a student</h3>
+                    <div>
+                        <p></p>
+                        <button type="submit">Add a student</button>
                     </div>
                 </form>
                 {showComponent && <AddStudent setError={setError} error={error}/>}

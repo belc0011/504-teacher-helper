@@ -10,7 +10,7 @@ from datetime import timedelta
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Accommodation, Student, Comment
+from models import User, Student, Accommodation, Comment
 
 # Views go here!
 class Signup(Resource):
@@ -68,9 +68,6 @@ class StudentList(Resource):
     def get(self):
         session.permanent = True
 
-        print("PRINTING SESSION OBJECT3:", session)
-        print("REQUEST HEADERS:", request.headers)
-
         if session.get('user_id'):
             # User is logged in, fetch their students
             user_id = session['user_id']
@@ -98,21 +95,24 @@ class StudentByName(Resource):
 
 class AddStudent(Resource):
     def post(self):
-        print("inside AddStudent")
+        print("Session User ID:", session.get('user_id'))
+        request_json = request.get_json()
         if session.get('user_id'):
             print("insidse if statement")
             user_id = session.get('user_id')
             new_student = Student(
-                first_name=request['first_name'],
-                last_name=request['last_name'],
-                grade=request['grade'],
+                first_name=request_json['first_name'],
+                last_name=request_json['last_name'],
+                grade=request_json['grade'],
                 user_id=user_id
             )
+            print("Here's the new student", new_student)
             if new_student:
                 db.session.add(new_student)
                 db.session.commit()
                 new_student_dict = new_student.to_dict()
                 response = make_response(new_student_dict, 201)
+                print("Here is the response:", response)
                 return response
             else:
                 return {'message': 'Error: unable to create new student'}, 404

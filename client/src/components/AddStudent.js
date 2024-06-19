@@ -36,6 +36,10 @@ function AddStudent({ setError }) {
                 setError(true)
             }
         })
+        setStudentFirstName("")
+        setStudentLastName("")
+        setGrade("default")
+        alert("Student successfully added!")
     }
     return(
         <form onSubmit={handleSubmit}>

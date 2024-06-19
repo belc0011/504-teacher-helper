@@ -7,7 +7,7 @@ from config import db, bcrypt
 class Student(db.Model, SerializerMixin):
     __tablename__ = "students"
 
-    serialize_rules = ('-accommodations.student',)
+    serialize_rules = ('-accommodations.student', '-user.students')
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
@@ -16,8 +16,6 @@ class Student(db.Model, SerializerMixin):
 
     accommodations = db.relationship('Accommodation', back_populates='student')
     user = db.relationship('User', back_populates='students')
-    def repr(self):
-        return f'{self.last_name}, {self.first_name} in grade {self.grade}'
 
 class Accommodation(db.Model, SerializerMixin):
     __tablename__ = "accommodations"
@@ -36,10 +34,12 @@ class Comment(db.Model, SerializerMixin):
     accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
 
     accommodation = db.relationship('Accommodation', back_populates='comments')
+    
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
-
+    
+    serialize_rules = ('-students.user',)
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
