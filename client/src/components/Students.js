@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from "react";
 import StudentCard from './StudentCard.js'
-
+import AddStudent from './AddStudent.js'
 function Students({ students, setStudents, setError }) {
+    const [showAddStudent, setShowAddStudent] = useState(false)
     useEffect(() => {
         fetch(`http://127.0.0.1:5555/students`, {
         method: "GET",
@@ -22,8 +23,12 @@ function Students({ students, setStudents, setError }) {
         })
     }, [setError, setStudents])
     
+    function handleClick(e) {
+        setShowAddStudent(prevState => !prevState)
+    }
     return (
         <div>
+            <button onClick={handleClick}>Click here to add a new student</button>
             <main>
                 <h1>Students</h1>
                 <div>
@@ -41,6 +46,7 @@ function Students({ students, setStudents, setError }) {
                     })}
                 </div>
             </main>
+            {showAddStudent && <AddStudent setError={setError} />}
         </div>
     )
 }
