@@ -106,8 +106,8 @@ class AddStudent(Resource):
             print("insidse if statement")
             user_id = session.get('user_id')
             new_student = Student(
-                first_name=request_json['first_name'],
-                last_name=request_json['last_name'],
+                first_name=request_json['first_name'].title(),
+                last_name=request_json['last_name'].title(),
                 grade=request_json['grade'],
                 user_id=user_id
             )

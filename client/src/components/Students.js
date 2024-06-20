@@ -13,12 +13,12 @@ function Students({ students, setStudents, setError }) {
                 res.json().then(data => setStudents(data))
             }
             else {
-                setError(true)
+                //setError(true)
             }
         })
         .catch(error => {
             console.error("Error parsing JSON:", error); // Log JSON parsing errors
-            setError(true)
+            //setError(true)
         })
     }, [setError, setStudents])
     

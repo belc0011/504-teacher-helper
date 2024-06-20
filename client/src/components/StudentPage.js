@@ -21,6 +21,7 @@ function StudentPage({ }) {
         })
         .then(res => res.json())
         .then(data => setAccommodationToDisplay(data))
+        alert("Acommodation successfully added!")
     }
     useEffect(() => {
         console.log(id)

@@ -31,10 +31,10 @@ function Home({ error, setError, user, students, setStudents }) {
         <div>
             <main>
                 <form onSubmit={handleSubmit2}>
-                    <h3>Click here to pull up a list of all students</h3>
+                    <h3>Click here for a list of your students</h3>
                     <div>
                         <p></p>
-                        <button type="submit">Submit</button>
+                        <button type="submit">Student List</button>
                     </div>
                 </form>
                 <form onSubmit={handleSubmit3}>
