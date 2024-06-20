@@ -6,9 +6,6 @@ function Students({ students, setStudents, setError }) {
     useEffect(() => {
         fetch(`http://127.0.0.1:5555/students`, {
         method: "GET",
-        headers: {
-          "Cookie": "cookieName=cookieValue"
-        },
         credentials: 'include'
         })
         .then(res => {
@@ -23,8 +20,8 @@ function Students({ students, setStudents, setError }) {
             console.error("Error parsing JSON:", error); // Log JSON parsing errors
             setError(true)
         })
-    }, [])
-
+    }, [setError, setStudents])
+    
     return (
         <div>
             <main>
@@ -34,6 +31,7 @@ function Students({ students, setStudents, setError }) {
                         return (
                             <StudentCard
                             key={student.id}
+                            id={student.id}
                             firstName={student.first_name}
                             lastName={student.last_name}
                             grade={student.grade}

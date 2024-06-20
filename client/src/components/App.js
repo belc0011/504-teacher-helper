@@ -46,6 +46,9 @@ function App() {
               <Route exact path="/students">
                 <Students setError={setError} students={students} setStudents={setStudents}/>
               </Route>
+              <Route exact path="/students/:id">
+                <StudentPage />
+              </Route>
             </Switch>
           </main>
         </>

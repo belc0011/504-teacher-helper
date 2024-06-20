@@ -1,0 +1,79 @@
+import React, { useState, useEffect } from "react";
+import { useHistory, useLocation } from 'react-router-dom'
+
+function StudentPage({ }) {
+    const location = useLocation()
+    const url = location.pathname
+    const id = url.slice(-1)
+    const [studentToDisplay, setStudentToDisplay] = useState({})
+    const [newAccommodation, setNewAccommodation] = useState("")
+    const [accommodationToDisplay, setAccommodationToDisplay] = useState("")
+    const [studentData, setStudentData] = useState(false)
+
+    function handleClick(e) {
+        fetch(`http://127.0.0.1:5555/add_accommodation/${id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({id: id, accommodation: newAccommodation}),
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(data => setAccommodationToDisplay(data))
+    }
+    useEffect(() => {
+        console.log(id)
+        fetch(`http://127.0.0.1:5555/students/${id}`, {
+            method: "GET",
+            credentials: 'include'
+            })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } 
+            else {
+                throw new Error('Error fetching student data');
+            }
+        })
+        .then((data) => {
+            console.log(data)
+            setStudentToDisplay(data)
+            setStudentData(true)})
+        .catch((error) => {
+            console.error(error);
+        });
+    }, [])
+    
+    function handleNewAccommodation(e) {
+        setNewAccommodation(e.target.value)
+    }
+    return (
+        <div>
+            <h1>Student info:</h1>
+            { studentData ? (
+                <h2>{studentToDisplay.first_name} {studentToDisplay.last_name}</h2>
+            ) : (
+                <p>No student data to display</p>
+                )}
+            <h2>To add an accommodation for this student, select the accommodation from the dropdown and click Submit </h2>
+            <label htmlFor="new-accommodation">Accommodations</label>
+                    <div>
+                        <select type="dropdown" id="accommodation" value={newAccommodation} onChange={handleNewAccommodation}>
+                            <option value="default">Select One</option>
+                            <option value="preferential-seating">Preferential Seating</option>
+                            <option value="guided-notes">Guided Notes</option>
+                            <option value="extra-time">Extra Time</option>
+                            <option value="small-group-testing">Small Group Testing</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <h1>   </h1>
+                    <h1>  </h1>
+                    <h1>  </h1>
+            <button onClick={handleClick}>Submit</button>
+        </div>
+    )
+}
+
+export default StudentPage

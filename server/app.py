@@ -84,11 +84,12 @@ class StudentList(Resource):
         else:
             return {'message': 'Unauthorized user'}, 401
 
-class StudentByName(Resource):
+class StudentById(Resource):
 
-    def get(self, name):
+    def get(self, id):
+        print("Here's the id from studentbyid: ", id)
         if session.get('user_id'):
-            student = Student.query.filter_by(last_name=session.get('last_name')).first()
+            student = Student.query.filter_by(id=id).first()
             if student:
                 response = make_response(student.to_dict(), 200)
                 return response
@@ -121,6 +122,23 @@ class AddStudent(Resource):
             else:
                 return {'message': 'Error: unable to create new student'}, 404
 
+class AddAccommodation(Resource):
+    def post(self, id):
+        request_json = request.get_json()
+        print("Inside AddAccommodation, here's request_json: ", request_json)
+        if session.get('user_id'):
+            new_accommodation = Accommodation(
+                description=request_json['accommodation'],
+                student_id=id
+            )
+            db.session.add(new_accommodation)
+            db.session.commit()
+            new_accommodation_dict = new_accommodation.to_dict()
+            description = new_accommodation_dict['description']
+            return 201
+        else:
+            return {'message': 'Error, unauthorized user'}, 401
+
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/', endpoint='')
 api.add_resource(Logout, '/logout', endpoint='logout')
@@ -128,6 +146,8 @@ api.add_resource(StudentList, '/students', endpoint='students')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Session, '/get_session_id', endpoint='get_session_id')
 api.add_resource(AddStudent, '/add_student', endpoint='add_student')
+api.add_resource(StudentById, '/students/<int:id>', endpoint='students/<int:id>')
+api.add_resource(AddAccommodation, '/add_accommodation/<int:id>', endpoint='add_accommodation/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=False)
