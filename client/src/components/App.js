@@ -44,13 +44,13 @@ function App() {
               <Route exact path="/signup">
                 <SignUp />
               </Route>
-              <Route exact path="/students">
+              <Route path="/students">
                 <Students setError={setError} students={students} setStudents={setStudents}/>
               </Route>
-              <Route exact path="/students/:id">
+              <Route path="/students/:id">
                 <StudentPage />
               </Route>
-              <Route exact path="/accommodations">
+              <Route path="/accommodations">
                 <AccommodationSearch />
               </Route>
             </Switch>

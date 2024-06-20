@@ -34,7 +34,7 @@ function AccommodationSearch() {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <h3>Search by accommodation: </h3>
+                <h1>Search by accommodation: </h1>
                 <label htmlFor="group">Accommodation</label>
                 <div>
                     <select type="dropdown" id="accommodation" value={accommodation} onChange={handleAccommodation}>
@@ -54,7 +54,7 @@ function AccommodationSearch() {
             <h1>Students with the selected accommodation:</h1>
             {studentList ? (
                 <div>{studentList.map((student) => {
-                    return <div>{student.first_name} {student.last_name}</div>
+                    return <h3>{student.first_name} {student.last_name}</h3>
                 })}
                     </div>
             ) : (
