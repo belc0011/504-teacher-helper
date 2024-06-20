@@ -6,6 +6,7 @@ import Students from './Students'
 import SignUp from './SignUp'
 import Home from './Home'
 import StudentPage from './StudentPage'
+import AccommodationSearch from './AccommodationSearch'
 
 function App() {
   const [user, setUser] = useState(null);
@@ -48,6 +49,9 @@ function App() {
               </Route>
               <Route exact path="/students/:id">
                 <StudentPage />
+              </Route>
+              <Route exact path="/accommodations">
+                <AccommodationSearch />
               </Route>
             </Switch>
           </main>

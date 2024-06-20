@@ -4,14 +4,12 @@ import AddStudent from './AddStudent'
 import Students from './Students'
 
 function Home({ error, setError, user, students, setStudents }) {
-    const [accommodation, setAccommodation] = useState("")
     const [showComponent, setShowComponent] = useState(false);
     const history = useHistory()
 
-    function handleAccommodation(e) {
-        setAccommodation(e.target.value)
+    function handleClick(e) {
+        history.push('/accommodations')
     }
-
     function handleSubmit(e) {
         e.preventDefault()
         setShowComponent(true)
@@ -23,36 +21,17 @@ function Home({ error, setError, user, students, setStudents }) {
         
     }
 
-    function handleSubmit3(e) {
-        e.preventDefault()
-    }
     if (students.length === 0) {
     return (
         <div>
             <main>
+                <h3>Click here to search by accommodation: </h3>
+                <button onClick={handleClick}>Accommodation Search</button>
                 <form onSubmit={handleSubmit2}>
                     <h3>Click here for a list of your students</h3>
                     <div>
                         <p></p>
                         <button type="submit">Student List</button>
-                    </div>
-                </form>
-                <form onSubmit={handleSubmit3}>
-                    <h3>Search by accommodation: </h3>
-                    <label htmlFor="group">Group</label>
-                    <div>
-                        <select type="dropdown" id="accommodation" value={accommodation} onChange={handleAccommodation}>
-                            <option value="default">Select One</option>
-                            <option value="preferential-seating">Preferential Seating</option>
-                            <option value="guided-notes">Guided Notes</option>
-                            <option value="extra-time">Extra Time</option>
-                            <option value="small-group-testing">Small Group Testing</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div>
-                        <p></p>
-                        <button type="submit">Submit</button>
                     </div>
                 </form>
                 <form onSubmit={handleSubmit}>

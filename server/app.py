@@ -139,6 +139,23 @@ class AddAccommodation(Resource):
         else:
             return {'message': 'Error, unauthorized user'}, 401
 
+class AccommodationSearch(Resource):
+    def get(self):
+        print("Inside AccommodationSearch Resource, here's the request args:", request.args)
+        if session.get('user_id'):
+            description = request.args.get('description')
+            accommodations = Accommodation.query.filter_by(description=description).all()
+            student_list = []
+            for accommodation in accommodations:
+                student = Student.query.filter_by(id=accommodation.student_id).first()
+                if student:
+                    student_list.append(student.to_dict())
+            response = make_response(student_list, 200)
+            return response
+        else:
+            return {'message': 'Error, unauthorized user'}, 401
+
+
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/', endpoint='')
 api.add_resource(Logout, '/logout', endpoint='logout')
@@ -148,6 +165,7 @@ api.add_resource(Session, '/get_session_id', endpoint='get_session_id')
 api.add_resource(AddStudent, '/add_student', endpoint='add_student')
 api.add_resource(StudentById, '/students/<int:id>', endpoint='students/<int:id>')
 api.add_resource(AddAccommodation, '/add_accommodation/<int:id>', endpoint='add_accommodation/<int:id>')
+api.add_resource(AccommodationSearch, '/search_accommodation', endpoint='search_accommodation')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=False)
