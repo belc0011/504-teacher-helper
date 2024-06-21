@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from 'react-router-dom'
+import StudentCard from './StudentCard'
 
 function Comments() {
     const location = useLocation()
@@ -29,7 +30,18 @@ function Comments() {
             console.error(error);
         });
     }, [])
-    return (<div></div>)
+
+    function handleClick(e) {
+        e.target.value
+    }
+    return (
+    <div>
+        <h3>Displaying accommodations for {studentInfo.first_name} {studentInfo.last_name}: </h3>
+        {studentInfo.accommodations ? studentInfo.accommodations.map((accommodation) => {
+            return <div key={id}><h3>{accommodation.description}</h3><button onClick={handleClick}>Click to add an accommodation</button></div>
+        }) : <h2>No accommodations</h2>}
+    </div>
+    )
 }
 
 export default Comments

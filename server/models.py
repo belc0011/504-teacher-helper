@@ -40,6 +40,7 @@ class Comment(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
+    description = db.Column(db.String)
 
     accommodation = db.relationship('Accommodation', secondary=accommodation_comments, back_populates='comments')
     
