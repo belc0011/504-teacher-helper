@@ -28,6 +28,7 @@ class Signup(Resource):
         session['user_id'] = new_user.id
         response = make_response(new_user_dict, 201)
         return response
+    
 class Login(Resource):
     def post(self):
         session.permanent = True
@@ -128,13 +129,12 @@ class AddAccommodation(Resource):
         print("Inside AddAccommodation, here's request_json: ", request_json)
         if session.get('user_id'):
             new_accommodation = Accommodation(
-                description=request_json['accommodation'],
-                student_id=id
+                description=request_json['accommodation']
             )
             db.session.add(new_accommodation)
+            student = Student.query.filter_by(id=id).first()
+            student.accommodations.append(new_accommodation)
             db.session.commit()
-            new_accommodation_dict = new_accommodation.to_dict()
-            description = new_accommodation_dict['description']
             return 201
         else:
             return {'message': 'Error, unauthorized user'}, 401

@@ -32,7 +32,7 @@ function Comments() {
     }, [])
 
     function handleClick(e) {
-        e.target.value
+        return ""
     }
     return (
     <div>

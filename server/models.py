@@ -4,47 +4,44 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from config import db, bcrypt
 
-accommodation_comments = db.Table(
-    'accommodations_comments',
+student_accommodation = db.Table(
+    'students_accommodations',
+    db.Column('student_id', db.Integer, db.ForeignKey(
+        'students.id'), primary_key=True),
     db.Column('accommodation_id', db.Integer, db.ForeignKey(
-        'accommodations.id'), primary_key=True),
-    db.Column('comment_id', db.Integer, db.ForeignKey(
-        'comments.id'), primary_key=True)
+        'accommodations.id'), primary_key=True)
 )
 
 class Student(db.Model, SerializerMixin):
     __tablename__ = "students"
 
-    serialize_rules = ('-accommodations.student', '-user.students')
+    serialize_rules = ('-accommodations.students', '-user.students')
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     grade = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    accommodations = db.relationship('Accommodation', back_populates='student')
     user = db.relationship('User', back_populates='students')
+    
+    accommodations = db.relationship('Accommodation', secondary=student_accommodation, back_populates="students")
 
 class Accommodation(db.Model, SerializerMixin):
     __tablename__ = "accommodations"
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String)
-    student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
 
-    student = db.relationship('Student', back_populates='accommodations')
-    comments = db.relationship('Comment', secondary=accommodation_comments, back_populates="accommodation")
+    students = db.relationship('Student', secondary=student_accommodation, back_populates="accommodations")
 
 class Comment(db.Model, SerializerMixin):
     __tablename__ = "comments"
 
     id = db.Column(db.Integer, primary_key=True)
-    accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
     description = db.Column(db.String)
-
-    accommodation = db.relationship('Accommodation', secondary=accommodation_comments, back_populates='comments')
+    accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
     
-
+    
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
     
