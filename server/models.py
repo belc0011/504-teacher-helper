@@ -4,6 +4,14 @@ from sqlalchemy.ext.hybrid import hybrid_property
 
 from config import db, bcrypt
 
+accommodation_comments = db.Table(
+    'accommodations_comments',
+    db.Column('accommodation_id', db.Integer, db.ForeignKey(
+        'accommodations.id'), primary_key=True),
+    db.Column('comment_id', db.Integer, db.ForeignKey(
+        'comments.id'), primary_key=True)
+)
+
 class Student(db.Model, SerializerMixin):
     __tablename__ = "students"
 
@@ -25,7 +33,7 @@ class Accommodation(db.Model, SerializerMixin):
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
 
     student = db.relationship('Student', back_populates='accommodations')
-    comments = db.relationship('Comment', back_populates="accommodation")
+    comments = db.relationship('Comment', secondary=accommodation_comments, back_populates="accommodation")
 
 class Comment(db.Model, SerializerMixin):
     __tablename__ = "comments"
@@ -33,7 +41,7 @@ class Comment(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
 
-    accommodation = db.relationship('Accommodation', back_populates='comments')
+    accommodation = db.relationship('Accommodation', secondary=accommodation_comments, back_populates='comments')
     
 
 class User(db.Model, SerializerMixin):
@@ -60,3 +68,5 @@ class User(db.Model, SerializerMixin):
     def authenticate(self, password):
         return bcrypt.check_password_hash(
             self._password_hash, password.encode('utf-8'))
+    
+
