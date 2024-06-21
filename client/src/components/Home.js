@@ -21,7 +21,7 @@ function Home({ error, setError, user, students, setStudents }) {
         
     }
 
-    if (students.length === 0) {
+    //if (students.length === 0) {
     return (
         <div>
             <main>
@@ -44,14 +44,14 @@ function Home({ error, setError, user, students, setStudents }) {
                 {showComponent && <AddStudent students={students} setStudents={setStudents} setError={setError} error={error}/>}
             </main>
         </div>
-            )} 
-    else {
+            )//} 
+    /*else {
         return (
             <div>
                 <Students students={students} setStudents={setStudents}/>
             </div>
         )
-    }
+    }*/
 }
 
 export default Home

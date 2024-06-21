@@ -53,10 +53,15 @@ function StudentPage({ }) {
         <div>
             <h1>Student info:</h1>
             { studentData ? (
-                <h2>{studentToDisplay.first_name} {studentToDisplay.last_name}</h2>
-            ) : (
-                <p>No student data to display</p>
-                )}
+                <div>
+                    <h2>{studentToDisplay.first_name} {studentToDisplay.last_name}</h2>
+                    {studentToDisplay.accommodations ? studentToDisplay.accommodations.map((accommodation) => {
+                        return <div><a href={`/comments/${id}`}>{accommodation.description}</a> </div>;
+                    }) : <p>No Accommodations</p>}
+                </div>
+                ) : (
+                    <p>No student data to display</p>
+                    )}
             <h2>To add an accommodation for this student, select the accommodation from the dropdown and click Submit </h2>
             <label htmlFor="new-accommodation">Accommodations</label>
                     <div>

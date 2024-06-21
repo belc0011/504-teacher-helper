@@ -6,16 +6,16 @@ function StudentCard({firstName, lastName, grade, accommodations, id}) {
         <div className="card">
             <a href={`/students/${id}`}>{firstName} {lastName}</a>
             <h3>Grade {grade}</h3>
-            <ul>
-                Accommodations: 
+               <p> Accommodations: </p>
                 {accommodations && accommodations.length > 0 ? (
                     accommodations.map(accommodation => (
-                        <li key={accommodation.id}>{accommodation.description}</li>
+                        <div>
+                        <a href={`/comments/${id}`} key={accommodation.id}>{accommodation.description}</a>
+                        </div>
                     ))
                 ) : (
                     <div>No Accommodations</div>
                 )}
-            </ul>
         </div>
     )
 }

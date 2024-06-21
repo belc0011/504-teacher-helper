@@ -24,7 +24,7 @@ function Students({ students, setStudents, setError }) {
     }, [setError, setStudents])
     
     function handleClick(e) {
-        setShowAddStudent(prevState => !prevState)
+        setShowAddStudent(true)
     }
     return (
         <div>

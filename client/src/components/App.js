@@ -7,6 +7,7 @@ import SignUp from './SignUp'
 import Home from './Home'
 import StudentPage from './StudentPage'
 import AccommodationSearch from './AccommodationSearch'
+import Comments from './Comments'
 
 function App() {
   const [user, setUser] = useState(null);
@@ -41,17 +42,20 @@ function App() {
               <Route exact path="/">
                 <Home error={error} setError={setError} user={user} students={students} setStudents={setStudents}/>
               </Route>
-              <Route exact path="/signup">
+              <Route path="/signup">
                 <SignUp />
               </Route>
-              <Route path="/students">
+              <Route exact path="/students">
                 <Students setError={setError} students={students} setStudents={setStudents}/>
               </Route>
-              <Route path="/students/:id">
+              <Route exact path="/students/:id">
                 <StudentPage />
               </Route>
               <Route path="/accommodations">
                 <AccommodationSearch />
+              </Route>
+              <Route exact path="/comments/:id">
+                <Comments />
               </Route>
             </Switch>
           </main>
