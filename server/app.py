@@ -153,7 +153,13 @@ class AccommodationSearch(Resource):
         print("Inside AccommodationSearch Resource, here's the request args:", request.args)
         if session.get('user_id'):
             description = request.args.get('description')
-            accommodations = Accommodation.query.filter_by(description=description).all()
+            accommodation = Accommodation.query.filter_by(description=description).first()
+            accommodation_id = accommodation.id
+            query = select(student_accommodation).where(
+            (student_accommodation.c.accommodation_id == accommodation_id)
+            )
+            result = db.session.execute(query)
+            accommodations = result.fetchall()
             student_list = []
             for accommodation in accommodations:
                 student = Student.query.filter_by(id=accommodation.student_id).first()
