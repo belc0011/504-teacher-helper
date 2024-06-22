@@ -66,7 +66,7 @@ class Logout(Resource):
         session['user_id'] = None
         return {}, 204
 
-class StudentList(Resource):
+class Students(Resource):
     def get(self):
         session.permanent = True
         print("Here is the user_id: ", session.get('user_id'))
@@ -85,22 +85,6 @@ class StudentList(Resource):
                 return {'message': 'No students found'}, 404
         else:
             return {'message': 'Unauthorized user'}, 401
-
-class StudentById(Resource):
-
-    def get(self, id):
-        print("Here's the id from studentbyid: ", id)
-        if session.get('user_id'):
-            student = Student.query.filter_by(id=id).first()
-            if student:
-                response = make_response(student.to_dict(), 200)
-                return response
-            else:
-                return {'message': 'Student not found'}, 404
-        else:
-            return {'message': 'Error, unauthorized user'}, 401
-
-class AddStudent(Resource):
     def post(self):
         print("Session User ID:", session.get('user_id'))
         request_json = request.get_json()
@@ -125,6 +109,21 @@ class AddStudent(Resource):
                 return {'message': 'Error: unable to create new student'}, 404
         else:
             return 401
+
+class StudentById(Resource):
+
+    def get(self, id):
+        print("Here's the id from studentbyid: ", id)
+        if session.get('user_id'):
+            student = Student.query.filter_by(id=id).first()
+            if student:
+                response = make_response(student.to_dict(), 200)
+                return response
+            else:
+                return {'message': 'Student not found'}, 404
+        else:
+            return {'message': 'Error, unauthorized user'}, 401
+    
 
 class AddAccommodation(Resource):
     def post(self, id):
@@ -176,30 +175,62 @@ class AddComment(Resource):
             result = db.session.execute(stmt)
             updated_record = result.fetchone()
             response_data = {
-                'comment': updated_record.comments,
-                'accommodation': {
+                'accommodations': {
                     'aid': updated_record.accommodation_id,
-                    'id': updated_record.student_id
+                    'id': updated_record.student_id,
+                    'description': accommodation.description,
+                    'comment': updated_record.comments
                 }
             }
             response = make_response(response_data, 201)
             return response
         else:
             return 401
-            
-
+class JoinTableStudent(Resource):
+    def get(self, id):
+        if session.get('user_id'):
+            print("Inside JoinTable, ID:", id)
+            stmt = select(student_accommodation).where(
+                (student_accommodation.c.student_id == id)
+            )
+            result = db.session.execute(stmt)
+            print("Here's JoinTable result:", result)
+            updated_record = result.fetchall()
+            student = Student.query.filter_by(id=id).first()
+            first_name = student.first_name
+            last_name = student.last_name
+            student = first_name + " " + last_name
+            response_accommodations = []
+            if updated_record:
+                for record in updated_record:
+                    accommodation = Accommodation.query.filter_by(id=record.accommodation_id).first()
+                    response_accommodations.append({
+                        "description": accommodation.description,
+                        "comment": record.comments,
+                        "id": accommodation.id
+                    })
+                response_dict = {
+                    'student': student,
+                    'accommodations': response_accommodations
+                }
+                response = make_response(response_dict, 200)
+                return response
+            else:
+                return {'message': 'No data'}, 404
+        else:
+            return 401
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/', endpoint='')
 api.add_resource(Logout, '/logout', endpoint='logout')
-api.add_resource(StudentList, '/students', endpoint='students')
+api.add_resource(Students, '/students', endpoint='students')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(Session, '/get_session_id', endpoint='get_session_id')
-api.add_resource(AddStudent, '/add_student', endpoint='add_student')
 api.add_resource(StudentById, '/students/<int:id>', endpoint='students/<int:id>')
 api.add_resource(AddAccommodation, '/add_accommodation/<int:id>', endpoint='add_accommodation/<int:id>')
 api.add_resource(AccommodationSearch, '/search_accommodation', endpoint='search_accommodation')
 api.add_resource(AddComment, '/comments/<int:id>/<int:aid>', endpoint='comments/<int:id>/<int:aid>')
+api.add_resource(JoinTableStudent, '/join_table_student/<int:id>', endpoint='join_table_student/<int:id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=False)

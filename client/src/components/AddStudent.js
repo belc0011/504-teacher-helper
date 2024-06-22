@@ -27,7 +27,7 @@ function AddStudent({ setError }) {
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-          fetch("http://127.0.0.1:5555/add_student", {
+          fetch("http://127.0.0.1:5555/students", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

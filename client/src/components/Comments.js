@@ -5,9 +5,10 @@ import StudentCard from './StudentCard'
 
 function Comments() {
     const location = useLocation()
-    const [studentInfo, setStudentInfo] = useState({})
+    const [studentInfo, setStudentInfo] = useState("")
     const [refreshPage, setRefreshPage] = useState(false);
-    const [accommodation, setAccommodation] = useState("")
+    const [accommodationToDisplay, setAccommodationToDisplay] = useState("")
+    const [accommodations, setAccommodations] = useState([])
     const [comment, setComment] = useState("")
 
     const url = location.pathname
@@ -32,23 +33,27 @@ function Comments() {
             body: JSON.stringify(values, null, 2),
             credentials: 'include'
         })
-        .then(res => {
-            if (res.ok) {
-                res.json().then(data => {
-                    console.log(data)}
-                )
-                //setRefreshPage(prevState => !prevState)
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Error fetching student data');
             }
-            else {
-                //setError(true)
-            }
+        })
+        .then(data => {
+            console.log(data);
+            setAccommodationToDisplay(data.accommodations);
+            setAccommodations(data.accommodations);
+        })
+        .catch(error => {
+            console.error('Error:', error);
         })
     }
 })
     useEffect(() => {
         console.log(studentId)
         console.log(accommodationId)
-        fetch(`http://127.0.0.1:5555/students/${studentId}`, {
+        fetch(`http://127.0.0.1:5555/join_table_student/${studentId}`, {
             method: "GET",
             credentials: 'include'
             })
@@ -62,11 +67,13 @@ function Comments() {
         })
         .then((data) => {
             console.log(data)
-            setStudentInfo(data)
+            setStudentInfo(data.student)
+            console.log(data.student)
             const accommodation = data.accommodations.find((accommodation) => {
                 return accommodation.id===accommodationId
             })
-            setAccommodation(accommodation)
+            setAccommodationToDisplay(accommodation)
+            setAccommodations(data.accommodations)
             })
 
         .catch((error) => {
@@ -77,8 +84,12 @@ function Comments() {
 
     return (
     <div>
-        <h3>Displaying accommodations for {studentInfo.first_name} {studentInfo.last_name}: </h3>
-        {accommodation ? (<h3>{accommodation.description}</h3> 
+        <h3>Displaying accommodations for {studentInfo}: </h3>
+        {accommodationToDisplay ? (
+            <div>
+                <h3>{accommodationToDisplay.description}</h3>
+                {accommodationToDisplay.comment ? (<li>{accommodationToDisplay.comment}</li>) : null } 
+            </div>
         ) : (
             <h2>No accommodations</h2>
         )}
@@ -103,10 +114,6 @@ function Comments() {
                 <button type="submit">Submit</button>
             </div>
         </form>
-        <div>
-            <h2>Current comments for this accommodation:</h2>
-
-        </div>
     </div>
     )
 }
