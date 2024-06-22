@@ -130,12 +130,18 @@ class AddAccommodation(Resource):
         request_json = request.get_json()
         print("Inside AddAccommodation, here's request_json: ", request_json)
         if session.get('user_id'):
-            new_accommodation = Accommodation(
-                description=request_json['accommodation']
-            )
-            db.session.add(new_accommodation)
+            description = request_json.get('accommodation')
+            existing_accommodation = Accommodation.query.filter_by(description=description).first()
+            if existing_accommodation:
+                accommodation = existing_accommodation
+            else:
+                accommodation = Accommodation(
+                    description=request_json['accommodation']
+                )
+                db.session.add(accommodation)
             student = Student.query.filter_by(id=id).first()
-            student.accommodations.append(new_accommodation)
+            student.accommodations.append(accommodation)
+            accommodation.students.append(student)
             db.session.commit()
             response = make_response(student.to_dict(), 201)
             return response

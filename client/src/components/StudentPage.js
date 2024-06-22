@@ -8,8 +8,8 @@ function StudentPage({ }) {
     const parts = url.split("/")
     const id = parts[2]
     const [studentToDisplay, setStudentToDisplay] = useState({})
-    const [newAccommodation, setNewAccommodation] = useState("")
     const [studentData, setStudentData] = useState(false)
+    const [refreshPage, setRefreshPage] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -25,8 +25,8 @@ function StudentPage({ }) {
             credentials: 'include'
         })
         .then(res => res.json())
-        .then(data => setStudentToDisplay(data)) //doesn't work
-        setNewAccommodation("default")
+        .then(data => setStudentToDisplay(data)) 
+        setRefreshPage(prevState => !prevState) //isn't resetting accom dropdown
         alert("Acommodation successfully added!")
         }
     })

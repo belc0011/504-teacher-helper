@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useFormik } from "formik";
 import { useHistory } from 'react-router-dom'
 
 function AccommodationSearch() {
@@ -8,10 +9,12 @@ function AccommodationSearch() {
     function handleAccommodation(e) {
         setAccommodation(e.target.value)
     }
-
-    function handleSubmit(e) {
-        e.preventDefault()
-        fetch(`http://127.0.0.1:5555/search_accommodation?description=${accommodation}`, {
+    const formik = useFormik({
+        initialValues: {
+          accommodation: ""
+        },
+        onSubmit: (values) => {
+        fetch(`http://127.0.0.1:5555/search_accommodation?description=${formik.values.accommodation}`, {
             method: "GET",
             credentials: 'include'
             })
@@ -30,14 +33,19 @@ function AccommodationSearch() {
             console.error(error);
         });
     }
+})
     
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={formik.handleSubmit}>
                 <h1>Search by accommodation: </h1>
                 <label htmlFor="group">Accommodation</label>
                 <div>
-                    <select type="dropdown" id="accommodation" value={accommodation} onChange={handleAccommodation}>
+                    <select type="dropdown" 
+                    id="accommodation" 
+                    name="accommodation"
+                    value={formik.values.accommodation} 
+                    onChange={formik.handleChange}>
                         <option value="default">Select One</option>
                         <option value="preferential-seating">Preferential Seating</option>
                         <option value="guided-notes">Guided Notes</option>
