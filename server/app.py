@@ -137,7 +137,8 @@ class AddAccommodation(Resource):
             student = Student.query.filter_by(id=id).first()
             student.accommodations.append(new_accommodation)
             db.session.commit()
-            return 201
+            response = make_response(student.to_dict(), 201)
+            return response
         else:
             return {'message': 'Error, unauthorized user'}, 401
 

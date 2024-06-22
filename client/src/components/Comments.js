@@ -84,17 +84,18 @@ function Comments() {
 
     return (
     <div>
-        <h3>Displaying accommodations for {studentInfo}: </h3>
+        <h2>Displaying accommodations for {studentInfo}: </h2>
         {accommodationToDisplay ? (
             <div>
                 <h3>{accommodationToDisplay.description}</h3>
                 {accommodationToDisplay.comment ? (<li>{accommodationToDisplay.comment}</li>) : null } 
             </div>
         ) : (
-            <h2>No accommodations</h2>
+            <h3>No accommodations</h3>
         )}
+        <h3>You can add a comment (or change the existing comment) below: </h3>
         <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="comment">Comment to add: </label>
+        <label htmlFor="comment">Comment to add/update: </label>
             <div>
                 <select type="dropdown" 
                 name="comment"

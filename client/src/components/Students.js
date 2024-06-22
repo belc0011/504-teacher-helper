@@ -32,6 +32,7 @@ function Students({ students, setStudents, setError }) {
             {showAddStudent && <AddStudent setError={setError} />}
             <main>
                 <h1>Students</h1>
+                <h3>Click on an accommodation to see comments</h3>
                 <div>
                     {students.map(student => {
                         return (
