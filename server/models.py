@@ -6,6 +6,7 @@ from config import db, bcrypt
 
 student_accommodation = db.Table(
     'students_accommodations',
+    db.Column('comments', db.String),
     db.Column('student_id', db.Integer, db.ForeignKey(
         'students.id'), primary_key=True),
     db.Column('accommodation_id', db.Integer, db.ForeignKey(
@@ -33,13 +34,6 @@ class Accommodation(db.Model, SerializerMixin):
     description = db.Column(db.String)
 
     students = db.relationship('Student', secondary=student_accommodation, back_populates="accommodations")
-
-class Comment(db.Model, SerializerMixin):
-    __tablename__ = "comments"
-
-    id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String)
-    accommodation_id = db.Column(db.Integer, db.ForeignKey('accommodations.id'))
     
     
 class User(db.Model, SerializerMixin):

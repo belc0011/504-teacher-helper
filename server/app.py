@@ -10,16 +10,16 @@ from datetime import timedelta
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Student, Accommodation, Comment
+from models import User, Student, Accommodation
 
 # Views go here!
 class Signup(Resource):
     def post(self):
         request_dict = request.get_json()
         new_user = User(
-                first_name=request_dict['first_name'].title(),
-                last_name=request_dict['last_name'].title(),
-                username=request_dict['username'])
+                first_name=request_dict['firstName'].title(),
+                last_name=request_dict['lastName'].title(),
+                username=request_dict['userName'])
         new_user.password_hash = request_dict['password']
         
         db.session.add(new_user)
@@ -33,7 +33,7 @@ class Login(Resource):
     def post(self):
         session.permanent = True
         request_dict = request.get_json()
-        user = User.query.filter_by(username=request_dict['username']).first()
+        user = User.query.filter_by(username=request_dict['userName']).first()
         if user and user.authenticate(request_dict['password']):
             user_dict = user.to_dict()
             session['user_id'] = user.id
@@ -107,8 +107,8 @@ class AddStudent(Resource):
             print("insidse if statement")
             user_id = session.get('user_id')
             new_student = Student(
-                first_name=request_json['first_name'].title(),
-                last_name=request_json['last_name'].title(),
+                first_name=request_json['firstName'].title(),
+                last_name=request_json['lastName'].title(),
                 grade=request_json['grade'],
                 user_id=user_id
             )
@@ -122,6 +122,8 @@ class AddStudent(Resource):
                 return response
             else:
                 return {'message': 'Error: unable to create new student'}, 404
+        else:
+            return 401
 
 class AddAccommodation(Resource):
     def post(self, id):

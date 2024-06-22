@@ -10,7 +10,7 @@ function StudentPage({ }) {
     const [accommodationToDisplay, setAccommodationToDisplay] = useState("")
     const [studentData, setStudentData] = useState(false)
 
-    function handleClick(e) {
+    function handleSubmit(e) {
         fetch(`http://127.0.0.1:5555/add_accommodation/${id}`, {
             method: "POST",
             headers: {
@@ -21,6 +21,7 @@ function StudentPage({ }) {
         })
         .then(res => res.json())
         .then(data => setAccommodationToDisplay(data))
+        setNewAccommodation("default")
         alert("Acommodation successfully added!")
     }
     useEffect(() => {
@@ -62,22 +63,24 @@ function StudentPage({ }) {
                 ) : (
                     <p>No student data to display</p>
                     )}
-            <h2>To add an accommodation for this student, select the accommodation from the dropdown and click Submit </h2>
-            <label htmlFor="new-accommodation">Accommodations</label>
-                    <div>
-                        <select type="dropdown" id="accommodation" value={newAccommodation} onChange={handleNewAccommodation}>
-                            <option value="default">Select One</option>
-                            <option value="preferential-seating">Preferential Seating</option>
-                            <option value="guided-notes">Guided Notes</option>
-                            <option value="extra-time">Extra Time</option>
-                            <option value="small-group-testing">Small Group Testing</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <h1>   </h1>
-                    <h1>  </h1>
-                    <h1>  </h1>
-            <button onClick={handleClick}>Submit</button>
+            <form onSubmit={handleSubmit}>
+                <h2>To add an accommodation for this student, select the accommodation from the dropdown and click Submit </h2>
+                <label htmlFor="new-accommodation">Accommodations</label>
+                        <div>
+                            <select type="dropdown" id="accommodation" value={newAccommodation} onChange={handleNewAccommodation}>
+                                <option value="default">Select One</option>
+                                <option value="preferential-seating">Preferential Seating</option>
+                                <option value="guided-notes">Guided Notes</option>
+                                <option value="extra-time">Extra Time</option>
+                                <option value="small-group-testing">Small Group Testing</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <h1>   </h1>
+                        <h1>  </h1>
+                        <h1>  </h1>
+                <button type='submit'>Submit</button>
+            </form>
         </div>
     )
 }

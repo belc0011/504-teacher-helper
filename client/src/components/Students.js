@@ -29,6 +29,7 @@ function Students({ students, setStudents, setError }) {
     return (
         <div>
             <button onClick={handleClick}>Click here to add a new student</button>
+            {showAddStudent && <AddStudent setError={setError} />}
             <main>
                 <h1>Students</h1>
                 <div>
@@ -46,7 +47,6 @@ function Students({ students, setStudents, setError }) {
                     })}
                 </div>
             </main>
-            {showAddStudent && <AddStudent setError={setError} />}
         </div>
     )
 }

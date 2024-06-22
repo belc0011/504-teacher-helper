@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import { useHistory } from 'react-router-dom'
 import SignUp from './SignUp'
+import { useFormik } from "formik";
 import Home from './Home'
 function Login( {onLogin, error, setError} ) {
-    const [userName, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    
     const [showComponent, setShowComponent] = useState(false);
     const history = useHistory()
 
-    function handleSubmit(e) {
-        e.preventDefault()
+    const formik = useFormik({
+        initialValues: {
+          userName: "",
+          password: "",
+        },
+        onSubmit: (values) => {
         fetch("http://127.0.0.1:5555", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ username: userName, password: password }),
+            body: JSON.stringify(values, null, 2),
             credentials: 'include'
         })
         .then(res => {
@@ -27,30 +31,33 @@ function Login( {onLogin, error, setError} ) {
             }
         })
     }
+})
     function handleClick() {
         setShowComponent(true); // Set showComponent to true when the button is clicked
-    }
-
-    function handleUsername(e) {
-        setUsername(e.target.value)
-    }
-
-    function handlePassword(e) {
-        setPassword(e.target.value)
     }
 
     return (
         <div>
             <main>
                 <h1>Sign In</h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={formik.handleSubmit}>
                     <label htmlFor="username">Username</label>
                     <div>
-                        <input type="text" placeholder="Username" id="username" value={userName} onChange={handleUsername}/>
+                        <input 
+                        type="text" 
+                        placeholder="Username"
+                        name="userName" 
+                        id="username" 
+                        value={formik.values.userName} 
+                        onChange={formik.handleChange}/>
                     </div>
                     <label htmlFor="password">Password</label>
                     <div>
-                        <input type="password" id="password" value={password} onChange={handlePassword}/>
+                        <input type="password" 
+                        name="password"
+                        id="password" 
+                        value={formik.values.password} 
+                        onChange={formik.handleChange}/>
                     </div>
                     <div>
                         <p></p>
