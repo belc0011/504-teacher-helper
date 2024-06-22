@@ -91,11 +91,11 @@ function Comments() {
                 value={formik.values.comment} 
                 onChange={formik.handleChange}>
                     <option value="default">Select One</option>
-                    <option value="5">5: Helpful</option>
-                    <option value="5">4: Somewhat Helpful</option>
-                    <option value="3">3: Neutral</option>
-                    <option value="2">2: Changes needed</option>
-                    <option value="1">1: Remove accommodation</option>
+                    <option value="Helpful">5: Helpful</option>
+                    <option value="Somewhat helpful">4: Somewhat Helpful</option>
+                    <option value="Neutral">3: Neutral</option>
+                    <option value="Changes needed">2: Changes needed</option>
+                    <option value="Remove">1: Remove accommodation</option>
                 </select>
             </div>
             <div>

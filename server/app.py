@@ -6,6 +6,7 @@
 from flask import request, session, make_response, jsonify
 from flask_restful import Resource
 from datetime import timedelta
+from sqlalchemy import select
 
 # Local imports
 from config import app, db, api
@@ -168,8 +169,20 @@ class AddComment(Resource):
                 ).values(comments=comment)
             db.session.execute(stmt)
             db.session.commit()
-            accommodation_dict = accommodation.to_dict()
-            response = make_response(accommodation_dict, 201)
+            stmt = select(student_accommodation).where(
+                (student_accommodation.c.student_id == id) &
+                (student_accommodation.c.accommodation_id == aid)
+            )
+            result = db.session.execute(stmt)
+            updated_record = result.fetchone()
+            response_data = {
+                'comment': updated_record.comments,
+                'accommodation': {
+                    'aid': updated_record.accommodation_id,
+                    'id': updated_record.student_id
+                }
+            }
+            response = make_response(response_data, 201)
             return response
         else:
             return 401
