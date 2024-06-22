@@ -17,6 +17,10 @@ function SignUp({ onLogin, error, setError }) {
         .string()
         .min(7, "Must be at least 7 characters")
         .required("Password is required"),
+        confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
+        .required('Please confirm your password'),
         firstName: yup.string().required("Must enter a first name").max(15),
         lastName: yup.string().required("Must enter a last name").max(20)
       });
@@ -27,6 +31,7 @@ function SignUp({ onLogin, error, setError }) {
           lastName: "",
           userName: "",
           password: "",
+          confirmPassword: ""
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
@@ -99,6 +104,18 @@ function SignUp({ onLogin, error, setError }) {
                         onBlur={formik.handleBlur}/>
                         {formik.touched.password && formik.errors.password ? (
                         <p style={{ color: "red" }}>{formik.errors.password}</p>
+                        ) : null}
+                    </div>
+                    <label htmlFor="password">Confirm password: </label>
+                    <div>
+                        <input type="password" 
+                        id="confirm-password" 
+                        name="confirmPassword"
+                        value={formik.values.confirmPassword} 
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}/>
+                        {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+                        <p style={{ color: "red" }}>{formik.errors.confirmPassword}</p>
                         ) : null}
                     </div>
                     <div>

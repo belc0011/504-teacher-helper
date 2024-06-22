@@ -16,7 +16,7 @@ student_accommodation = db.Table(
 class Student(db.Model, SerializerMixin):
     __tablename__ = "students"
 
-    serialize_rules = ('-accommodations.students', '-user.students')
+    serialize_rules = ('-accommodations.students', '-user.students', '-classes.student')
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
@@ -26,6 +26,7 @@ class Student(db.Model, SerializerMixin):
     user = db.relationship('User', back_populates='students')
     
     accommodations = db.relationship('Accommodation', secondary=student_accommodation, back_populates="students")
+    classes = db.relationship('Class', back_populates='student')
 
 class Accommodation(db.Model, SerializerMixin):
     __tablename__ = "accommodations"
@@ -61,4 +62,12 @@ class User(db.Model, SerializerMixin):
         return bcrypt.check_password_hash(
             self._password_hash, password.encode('utf-8'))
     
+    class Class(db.Model, SerializerMixin):
+        __tablename__ = "classes"
 
+        serialize_rules = ('-students.class')
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String)
+        student_id = db.Column(db.Integer, db.ForeignKey('students.id'))
+
+        student = db.relationship('Student', back_populates='classes')
