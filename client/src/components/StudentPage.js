@@ -57,7 +57,7 @@ function StudentPage({ }) {
                 <div>
                     <h2>{studentToDisplay.first_name} {studentToDisplay.last_name}</h2>
                     {studentToDisplay.accommodations ? studentToDisplay.accommodations.map((accommodation) => {
-                        return <div><a href={`/comments/${id}`}>{accommodation.description}</a> </div>;
+                        return <div><a href={`/comments/${id}/${accommodation.id}`} key={id}>{accommodation.description}</a> </div>;
                     }) : <p>No Accommodations</p>}
                 </div>
                 ) : (

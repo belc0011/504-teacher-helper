@@ -54,7 +54,7 @@ function App() {
               <Route path="/accommodations">
                 <AccommodationSearch />
               </Route>
-              <Route exact path="/comments/:id">
+              <Route exact path="/comments/:studentId/:accommodationId">
                 <Comments />
               </Route>
             </Switch>

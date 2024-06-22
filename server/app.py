@@ -10,7 +10,7 @@ from datetime import timedelta
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Student, Accommodation
+from models import User, Student, Accommodation, student_accommodation
 
 # Views go here!
 class Signup(Resource):
@@ -157,6 +157,24 @@ class AccommodationSearch(Resource):
         else:
             return {'message': 'Error, unauthorized user'}, 401
 
+class AddComment(Resource):
+    def post(self, id, aid):
+        if session.get('user_id'):
+            comment = request.json.get('comment')
+            accommodation = Accommodation.query.filter_by(id=aid).first()
+            stmt = student_accommodation.update().where(
+                (student_accommodation.c.student_id == id) &
+                (student_accommodation.c.accommodation_id == aid)
+                ).values(comments=comment)
+            db.session.execute(stmt)
+            db.session.commit()
+            accommodation_dict = accommodation.to_dict()
+            response = make_response(accommodation_dict, 201)
+            return response
+        else:
+            return 401
+            
+
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/', endpoint='')
@@ -168,6 +186,7 @@ api.add_resource(AddStudent, '/add_student', endpoint='add_student')
 api.add_resource(StudentById, '/students/<int:id>', endpoint='students/<int:id>')
 api.add_resource(AddAccommodation, '/add_accommodation/<int:id>', endpoint='add_accommodation/<int:id>')
 api.add_resource(AccommodationSearch, '/search_accommodation', endpoint='search_accommodation')
+api.add_resource(AddComment, '/comments/<int:id>/<int:aid>', endpoint='comments/<int:id>/<int:aid>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=False)
