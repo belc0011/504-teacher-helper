@@ -22,8 +22,7 @@ function AddStudent({ setError }) {
         initialValues: {
           firstName: "",
           lastName: "",
-          userName: "",
-          password: "",
+          grade: "",
         },
         validationSchema: formSchema,
         onSubmit: (values) => {

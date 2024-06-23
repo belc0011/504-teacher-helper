@@ -139,6 +139,22 @@ class StudentById(Resource):
         else:
             return {'message': 'Unauthorized user'}, 401
     
+    def patch(self, id):
+        if session.get('user_id'):
+            request_dict = request.get_json()
+            student = Student.query.filter_by(id=id).first()
+            if student:
+                student.first_name = request_dict.get('firstName', student.first_name).title()
+                student.last_name = request_dict.get('lastName', student.last_name).title()
+                student.grade = request_dict.get('grade', student.grade)
+                db.session.commit()
+                response = make_response(student.to_dict(), 200)
+                return response
+            else:
+                return {"error": "Student not found"}, 404
+        else:
+            return {"error": "Unauthorized"}, 401
+
 
 class AddAccommodation(Resource):
     def post(self, id):

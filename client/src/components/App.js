@@ -8,6 +8,7 @@ import Home from './Home'
 import StudentPage from './StudentPage'
 import AccommodationSearch from './AccommodationSearch'
 import Comments from './Comments'
+import EditStudent from './EditStudent'
 
 function App() {
   const [user, setUser] = useState(null);
@@ -56,6 +57,9 @@ function App() {
               </Route>
               <Route exact path="/comments/:studentId/:accommodationId">
                 <Comments />
+              </Route>
+              <Route exact path="/edit_student/:studentId">
+                <EditStudent />
               </Route>
             </Switch>
           </main>

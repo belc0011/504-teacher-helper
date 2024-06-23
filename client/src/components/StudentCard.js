@@ -1,7 +1,11 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 function StudentCard({firstName, lastName, grade, accommodations, id}) {
-    console.log("First name: " + firstName + "Last name: " + lastName + "Grade" + grade + "ID:" + id)
+    const history = useHistory()
+    function handleClick(e) {
+        history.push(`edit_student/${id}`)
+    }
     return (
         <div className="card">
             <a href={`/students/${id}`}>{firstName} {lastName}</a>
@@ -16,6 +20,7 @@ function StudentCard({firstName, lastName, grade, accommodations, id}) {
                 ) : (
                     <div>No Accommodations</div>
                 )}
+            <button onClick={handleClick}>Click to edit student info</button>
         </div>
     )
 }
