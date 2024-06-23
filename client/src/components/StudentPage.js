@@ -30,6 +30,25 @@ function StudentPage({ }) {
         alert("Acommodation successfully added!")
         }
     })
+    const formik2 = useFormik({
+        initialValues: {
+          accommodation: ""
+        },
+        onSubmit: (values) => {
+        fetch(`http://127.0.0.1:5555/students/${id}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values, null, 2),
+            credentials: 'include'
+        })
+        .then(res => res.json())
+        .then(data => setStudentToDisplay(data)) 
+        setRefreshPage(prevState => !prevState) //isn't resetting accom dropdown
+        alert("Class successfully added!")
+        }
+    })
     useEffect(() => {
         console.log(id)
         fetch(`http://127.0.0.1:5555/students/${id}`, {
@@ -55,11 +74,11 @@ function StudentPage({ }) {
     
     return (
         <div>
-            <h1>Student info:</h1>
-            <h3>Click on an accommodation to see comments</h3>
+            <h1>{studentToDisplay.first_name} {studentToDisplay.last_name}</h1>
+            <h2>Accommodations: </h2>
+            <h3>(Click on an accommodation to see comments)</h3>
             { studentData ? (
                 <div>
-                    <h2>{studentToDisplay.first_name} {studentToDisplay.last_name}</h2>
                     {studentToDisplay.accommodations ? studentToDisplay.accommodations.map((accommodation) => {
                         return <div><a href={`/comments/${id}/${accommodation.id}`} key={id}>{accommodation.description}</a> </div>;
                     }) : <p>No Accommodations</p>}
@@ -67,6 +86,16 @@ function StudentPage({ }) {
                 ) : (
                     <p>No student data to display</p>
                     )}
+                <div>
+                    { studentToDisplay.classes && studentToDisplay.classes.length > 0 ? (
+                        <div>
+                            <h2>Classes:</h2>
+                            {studentToDisplay.classes.map((classItem) => {
+                                return <h3 key={studentToDisplay.id}>{classItem.name}</h3>;
+                            })}
+                        </div>
+                    ) : null}
+                </div>
             <form onSubmit={formik.handleSubmit}>
                 <h2>To add an accommodation for this student, select the accommodation from the dropdown and click Submit </h2>
                 <label htmlFor="new-accommodation">Accommodations</label>
@@ -88,6 +117,22 @@ function StudentPage({ }) {
                         <h1>  </h1>
                         <h1>  </h1>
                 <button type='submit'>Submit</button>
+            </form>
+            <br></br>
+            <br></br>
+            <form onSubmit={formik2.handleSubmit}>
+                <div>
+                <h2>To add a class for this student, type the class in the text box and click Submit </h2>
+                    <label htmlFor="new-class">Add a new class:</label>
+                    <input type="text"
+                    id="class"
+                    name="class"
+                    value={formik2.values.class}
+                    onChange={formik2.handleChange}
+                    />
+                </div>
+                <br></br>
+                <button type="submit">Submit</button>
             </form>
         </div>
     )

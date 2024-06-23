@@ -11,7 +11,7 @@ from sqlalchemy import select
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Student, Accommodation, student_accommodation
+from models import User, Student, Accommodation, Classes, student_accommodation
 
 # Views go here!
 class Signup(Resource):
@@ -124,6 +124,21 @@ class StudentById(Resource):
         else:
             return {'message': 'Error, unauthorized user'}, 401
     
+    def post(self, id):
+        if session.get('user_id'):
+            new_class_dict = request.get_json()
+            new_class = Classes(
+                name = new_class_dict['class'].title(),
+                student_id=id
+                )
+            db.session.add(new_class)
+            db.session.commit()
+            student = Student.query.filter_by(id=id).first()
+            response = make_response(student.to_dict(), 201)
+            return response
+        else:
+            return {'message': 'Unauthorized user'}, 401
+    
 
 class AddAccommodation(Resource):
     def post(self, id):
@@ -232,6 +247,7 @@ class JoinTableStudent(Resource):
                 return {'message': 'No data'}, 404
         else:
             return 401
+
 
 api.add_resource(Signup, '/signup', endpoint='signup')
 api.add_resource(Login, '/', endpoint='')
