@@ -155,6 +155,15 @@ class StudentById(Resource):
         else:
             return {"error": "Unauthorized"}, 401
 
+    def delete(self, id):
+        if session.get('user_id'):
+            student = Student.query.filter_by(id=id).first()
+            db.session.delete(student)
+            db.session.commit()
+            response = {'message': 'Successfully deleted'}, 200
+            return response
+        else:
+            return {'error': 'Unauthorized'}, 401
 
 class AddAccommodation(Resource):
     def post(self, id):

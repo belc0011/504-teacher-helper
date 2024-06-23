@@ -9,6 +9,7 @@ import StudentPage from './StudentPage'
 import AccommodationSearch from './AccommodationSearch'
 import Comments from './Comments'
 import EditStudent from './EditStudent'
+import DeleteStudent from './DeleteStudent'
 
 function App() {
   const [user, setUser] = useState(null);
@@ -60,6 +61,9 @@ function App() {
               </Route>
               <Route exact path="/edit_student/:studentId">
                 <EditStudent />
+              </Route>
+              <Route exact path="/delete/:studentId">
+                <DeleteStudent />
               </Route>
             </Switch>
           </main>

@@ -10,6 +10,7 @@ function StudentPage({ }) {
     const [studentToDisplay, setStudentToDisplay] = useState({})
     const [studentData, setStudentData] = useState(false)
     const [refreshPage, setRefreshPage] = useState(false);
+    const history = useHistory()
 
     const formik = useFormik({
         initialValues: {
@@ -72,9 +73,14 @@ function StudentPage({ }) {
         });
     }, [])
     
+    function handleDelete(e) {
+        history.push(`/delete/${id}`)
+    }
     return (
         <div>
             <h1>{studentToDisplay.first_name} {studentToDisplay.last_name}</h1>
+            <label htmlFor="delete-student">To delete this studet's record, click here:</label>
+            <button onClick={handleDelete}>Click here to delete</button>
             <h2>Accommodations: </h2>
             <h3>(Click on an accommodation to see comments)</h3>
             { studentData ? (
