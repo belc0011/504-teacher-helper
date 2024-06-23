@@ -192,6 +192,7 @@ class AccommodationSearch(Resource):
     def get(self):
         print("Inside AccommodationSearch Resource, here's the request args:", request.args)
         if session.get('user_id'):
+            user_id = session.get('user_id')
             description = request.args.get('description')
             accommodation = Accommodation.query.filter_by(description=description).first()
             accommodation_id = accommodation.id
@@ -204,7 +205,9 @@ class AccommodationSearch(Resource):
             for accommodation in accommodations:
                 student = Student.query.filter_by(id=accommodation.student_id).first()
                 if student:
-                    student_list.append(student.to_dict())
+                    student_user = student.user_id
+                    if student_user == user_id:
+                        student_list.append(student.to_dict())
             response = make_response(student_list, 200)
             return response
         else:

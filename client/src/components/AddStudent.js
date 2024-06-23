@@ -3,11 +3,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useHistory } from 'react-router-dom'
 
-function AddStudent({ setError }) {
+function AddStudent() {
     
-    const [refreshPage, setRefreshPage] = useState(false);
     const history = useHistory()
-    
+
     const formSchema = yup.object().shape({
         firstName: yup
         .string()
@@ -37,9 +36,11 @@ function AddStudent({ setError }) {
         })
         .then(res => {
             if (res.ok) {
-                res.json().then(data => console.log(data))
+                res.json().then(
+                    data => {console.log(data)
                 alert("Student successfully added!")
-                history.push('/students');
+                history.push('/students')
+            })
             }
             else {
                 console.log("error: " + res)

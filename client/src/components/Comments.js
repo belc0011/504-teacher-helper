@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import { useHistory, useLocation } from 'react-router-dom'
-import StudentCard from './StudentCard'
 
 function Comments() {
     const location = useLocation()
     const [studentInfo, setStudentInfo] = useState("")
-    const [refreshPage, setRefreshPage] = useState(false);
     const [accommodationToDisplay, setAccommodationToDisplay] = useState("")
     const [accommodations, setAccommodations] = useState([])
-    const [comment, setComment] = useState("")
 
     const url = location.pathname
     const parts = url.split("/")
@@ -17,7 +14,7 @@ function Comments() {
     const studentIdString = parts[2]
     const accommodationId = parseInt(accommodationIdString)
     const studentId = parseInt(studentIdString)
-    const [showComponent, setShowComponent] = useState(false);
+    
     const history = useHistory()
 
     const formik = useFormik({
@@ -43,7 +40,6 @@ function Comments() {
         .then(data => {
             console.log(data);
             setAccommodationToDisplay(data.accommodations);
-            setAccommodations(data.accommodations);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -51,8 +47,7 @@ function Comments() {
     }
 })
     useEffect(() => {
-        console.log(studentId)
-        console.log(accommodationId)
+        
         fetch(`http://127.0.0.1:5555/join_table_student/${studentId}`, {
             method: "GET",
             credentials: 'include'
@@ -68,7 +63,6 @@ function Comments() {
         .then((data) => {
             console.log(data)
             setStudentInfo(data.student)
-            console.log(data.student)
             const accommodation = data.accommodations.find((accommodation) => {
                 return accommodation.id===accommodationId
             })

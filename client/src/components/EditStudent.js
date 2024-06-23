@@ -71,7 +71,7 @@ function EditStudent() {
                 history.push('/students')
             }
             else {
-                throw new Error('Failed to update student data');
+                console.log("error: " + res)
             }
         })
         .catch(error => {

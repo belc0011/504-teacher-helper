@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from 'react-router-dom'
 import AddStudent from './AddStudent'
-import Students from './Students'
-import { useFormik } from "formik";
-import * as yup from "yup";
 
-function Home({ error, setError, user, students, setStudents }) {
+function Home() {
     const [showComponent, setShowComponent] = useState(false);
     const history = useHistory()
 
@@ -23,7 +20,6 @@ function Home({ error, setError, user, students, setStudents }) {
         
     }
 
-    //if (students.length === 0) {
     return (
         <div>
             <main>
@@ -43,17 +39,10 @@ function Home({ error, setError, user, students, setStudents }) {
                         <button type="submit">Add a student</button>
                     </div>
                 </form>
-                {showComponent && <AddStudent students={students} setStudents={setStudents} setError={setError} error={error}/>}
+                {showComponent && <AddStudent />}
             </main>
         </div>
-            )//} 
-    /*else {
-        return (
-            <div>
-                <Students students={students} setStudents={setStudents}/>
-            </div>
-        )
-    }*/
+            )
 }
 
 export default Home

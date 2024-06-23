@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 
 
-function SignUp({ onLogin, error, setError }) {
+function SignUp({ onLogin }) {
     
     const [refreshPage, setRefreshPage] = useState(false);
     

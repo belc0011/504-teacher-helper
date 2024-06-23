@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from 'react-router-dom'
 import SignUp from './SignUp'
 import { useFormik } from "formik";
-import Home from './Home'
-function Login( {onLogin, error, setError} ) {
+function Login({ onLogin }) {
     
     const [showComponent, setShowComponent] = useState(false);
     const history = useHistory()
@@ -27,9 +26,11 @@ function Login( {onLogin, error, setError} ) {
                 res.json().then(user => onLogin(user))
             }
             else {
-                setError(true)
+                throw new Error('Error fetching student data');
             }
         })
+        .catch(error => {
+            console.error('Error updating student:', error)})
     }
 })
     function handleClick() {
@@ -67,7 +68,7 @@ function Login( {onLogin, error, setError} ) {
                 <p>Or, if you don't have an account...</p>
                     <div>
                         <button onClick={handleClick}>Sign Up</button>
-                        {showComponent && <SignUp onLogin={onLogin} setError={setError} error={error}/>}
+                        {showComponent && <SignUp onLogin={onLogin} />}
                     </div>
             </main>
         </div>

@@ -92,7 +92,7 @@ function StudentPage({ }) {
             { studentData ? (
                 <div>
                     {studentToDisplay.accommodations ? studentToDisplay.accommodations.map((accommodation) => {
-                        return <div><a href={`/comments/${id}/${accommodation.id}`} key={id}>{accommodation.description}</a> </div>;
+                        return <div key={accommodation.id}><a href={`/comments/${id}/${accommodation.id}`}>{accommodation.description}</a> </div>;
                     }) : <p>No Accommodations</p>}
                 </div>
                 ) : (
@@ -103,7 +103,7 @@ function StudentPage({ }) {
                         <div>
                             <h2>Classes:</h2>
                             {studentToDisplay.classes.map((classItem) => {
-                                return <h3 key={studentToDisplay.id}>{classItem.name}</h3>;
+                                return <h3 key={classItem.name}>{classItem.name}</h3>;
                             })}
                         </div>
                     ) : null}

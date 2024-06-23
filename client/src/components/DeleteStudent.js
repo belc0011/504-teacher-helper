@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import { useHistory, useLocation } from 'react-router-dom'
 
@@ -26,6 +26,8 @@ function DeleteStudent() {
         .then(data => {console.log(data)
         history.push('/students')})
         alert("Student successfully deleted!")
+        .catch(error => {
+            console.error('Error updating student:', error)})
         }
     })
     return (

@@ -14,12 +14,11 @@ function Students({ students, setStudents, setError }) {
                 res.json().then(data => setStudents(data))
             }
             else {
-                //setError(true)
+                console.log("error: " + res)
             }
         })
         .catch(error => {
-            console.error("Error parsing JSON:", error); // Log JSON parsing errors
-            //setError(true)
+            console.error("Error parsing JSON:", error);
         })
     }, [setError, setStudents])
     
@@ -29,7 +28,7 @@ function Students({ students, setStudents, setError }) {
     return (
         <div>
             <button onClick={handleClick}>Click here to add a new student</button>
-            {showAddStudent && <AddStudent setError={setError} />}
+            {showAddStudent && <AddStudent setError={setError} students={students} setStudents={setStudents}/>}
             <main>
                 <h1>Students</h1>
                 <h3>Click on an accommodation to see comments</h3>

@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import { useHistory } from 'react-router-dom'
 
 function AccommodationSearch() {
     const [accommodation, setAccommodation] = useState("")
     const [studentList, setStudentList] = useState([])
 
-    function handleAccommodation(e) {
-        setAccommodation(e.target.value)
-    }
     const formik = useFormik({
         initialValues: {
           accommodation: ""

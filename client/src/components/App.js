@@ -42,7 +42,7 @@ function App() {
           <main>
             <Switch>
               <Route exact path="/">
-                <Home error={error} setError={setError} user={user} students={students} setStudents={setStudents}/>
+                <Home />
               </Route>
               <Route path="/signup">
                 <SignUp />
@@ -69,7 +69,7 @@ function App() {
           </main>
         </>
       ) : (
-        <Login onLogin={setUser} error={error} setError={setError}/>
+        <Login onLogin={setUser} />
       )}
     </Router>
   );
