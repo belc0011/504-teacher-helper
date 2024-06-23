@@ -10,11 +10,11 @@ function AddStudent() {
     const formSchema = yup.object().shape({
         firstName: yup
         .string()
-        .matches(/^[a-zA-Z]+$/, "Names can not contain numbers or special characters")
+        .matches(/^[a-zA-Z\']+$/, "First name can not contain numbers or special characters, except an apostrophe")
         .required("First name is required"),
         lastName: yup
         .string()
-        .matches(/^[a-zA-Z\-]+$/, "Names can not contain numbers or special characters")
+        .matches(/^[a-zA-Z\-]+$/, "Last name can not contain numbers or special characters, except a hyphen")
         .required("Last name is required"),
       });
 

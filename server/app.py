@@ -5,7 +5,6 @@
 # Remote library imports
 from flask import request, session, make_response, jsonify
 from flask_restful import Resource
-from datetime import timedelta
 from sqlalchemy import select
 
 # Local imports
@@ -32,7 +31,6 @@ class Signup(Resource):
     
 class Login(Resource):
     def post(self):
-        session.permanent = True
         request_dict = request.get_json()
         user = User.query.filter_by(username=request_dict['userName']).first()
         if user and user.authenticate(request_dict['password']):
@@ -45,35 +43,24 @@ class Login(Resource):
 
 class CheckSession(Resource):
     def get(self):
-        session.permanent = True
-        print("Printing session object in CheckSession", session)
         if session.get('user_id'):
             user = User.query.filter_by(id=session.get('user_id')).first()
             response = make_response(user.to_dict(), 200)
             return response
         else:
             return {'message': 'Error, unauthorized user'}, 401
-
-class Session(Resource):
-    def get(self):
-        user_id = session.get('user_id')
-        return jsonify({'user_id': user_id})
    
 class Logout(Resource):
     def delete(self):
-        print("In Logout")
         session.get('user_id')
         session['user_id'] = None
         return {}, 204
 
 class Students(Resource):
     def get(self):
-        session.permanent = True
-        print("Here is the user_id: ", session.get('user_id'))
         if session.get('user_id'):
             user_id = session['user_id']
             students = Student.query.filter_by(user_id=user_id).all()
-            print("Here is the results of the query for students: ", students)
             if students:
                 student_list = []
                 for student in students:
@@ -86,10 +73,8 @@ class Students(Resource):
         else:
             return {'message': 'Unauthorized user'}, 401
     def post(self):
-        print("Session User ID:", session.get('user_id'))
         request_json = request.get_json()
         if session.get('user_id'):
-            print("insidse if statement")
             user_id = session.get('user_id')
             new_student = Student(
                 first_name=request_json['firstName'].title(),
@@ -97,13 +82,11 @@ class Students(Resource):
                 grade=request_json['grade'],
                 user_id=user_id
             )
-            print("Here's the new student", new_student)
             if new_student:
                 db.session.add(new_student)
                 db.session.commit()
                 new_student_dict = new_student.to_dict()
                 response = make_response(new_student_dict, 201)
-                print("Here is the response:", response)
                 return response
             else:
                 return {'message': 'Error: unable to create new student'}, 404
@@ -113,7 +96,6 @@ class Students(Resource):
 class StudentById(Resource):
 
     def get(self, id):
-        print("Here's the id from studentbyid: ", id)
         if session.get('user_id'):
             student = Student.query.filter_by(id=id).first()
             if student:
@@ -168,7 +150,6 @@ class StudentById(Resource):
 class AddAccommodation(Resource):
     def post(self, id):
         request_json = request.get_json()
-        print("Inside AddAccommodation, here's request_json: ", request_json)
         if session.get('user_id'):
             description = request_json.get('accommodation')
             existing_accommodation = Accommodation.query.filter_by(description=description).first()
@@ -190,7 +171,6 @@ class AddAccommodation(Resource):
 
 class AccommodationSearch(Resource):
     def get(self):
-        print("Inside AccommodationSearch Resource, here's the request args:", request.args)
         if session.get('user_id'):
             user_id = session.get('user_id')
             description = request.args.get('description')
@@ -242,15 +222,14 @@ class AddComment(Resource):
             return response
         else:
             return 401
+        
 class JoinTableStudent(Resource):
     def get(self, id):
         if session.get('user_id'):
-            print("Inside JoinTable, ID:", id)
             stmt = select(student_accommodation).where(
                 (student_accommodation.c.student_id == id)
             )
             result = db.session.execute(stmt)
-            print("Here's JoinTable result:", result)
             updated_record = result.fetchall()
             student = Student.query.filter_by(id=id).first()
             first_name = student.first_name
@@ -282,7 +261,6 @@ api.add_resource(Login, '/', endpoint='')
 api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(Students, '/students', endpoint='students')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
-api.add_resource(Session, '/get_session_id', endpoint='get_session_id')
 api.add_resource(StudentById, '/students/<int:id>', endpoint='students/<int:id>')
 api.add_resource(AddAccommodation, '/add_accommodation/<int:id>', endpoint='add_accommodation/<int:id>')
 api.add_resource(AccommodationSearch, '/search_accommodation', endpoint='search_accommodation')
