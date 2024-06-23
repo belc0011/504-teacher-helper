@@ -6,7 +6,8 @@ import { useHistory } from 'react-router-dom'
 function AddStudent({ setError }) {
     
     const [refreshPage, setRefreshPage] = useState(false);
-
+    const history = useHistory()
+    
     const formSchema = yup.object().shape({
         firstName: yup
         .string()
@@ -38,7 +39,7 @@ function AddStudent({ setError }) {
             if (res.ok) {
                 res.json().then(data => console.log(data))
                 alert("Student successfully added!")
-                setRefreshPage(!refreshPage);
+                history.push('/students');
             }
             else {
                 console.log("error: " + res)

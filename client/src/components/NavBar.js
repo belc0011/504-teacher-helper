@@ -25,6 +25,9 @@ function NavBar({ user, setUser }) {
             <div>
                 <Link to="/students" className="nav-link">Student List</Link>
             </div>
+            <div>
+                <Link to="/accommodations" className="nav-link">Accommodation Search</Link>
+            </div>
         </nav>
     );
   }

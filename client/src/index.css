@@ -48,7 +48,7 @@ ul li {
 .nav-link{
   display: inline-block;
   box-sizing: border-box;
-  width: 100px;
+  width: 150px;
   padding: 5px;
   margin: 0 6px 6px;
   background: blue;

@@ -62,7 +62,7 @@ function AccommodationSearch() {
             <h1>Students with the selected accommodation:</h1>
             {studentList ? (
                 <div>{studentList.map((student) => {
-                    return <h3>{student.first_name} {student.last_name}</h3>
+                    return <h3 key={student.id}>{student.first_name} {student.last_name}</h3>
                 })}
                     </div>
             ) : (

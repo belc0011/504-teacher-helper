@@ -76,11 +76,17 @@ function StudentPage({ }) {
     function handleDelete(e) {
         history.push(`/delete/${id}`)
     }
+
+    function handleEdit(e) {
+        history.push(`/edit_student/${id}`)
+    }
     return (
         <div>
             <h1>{studentToDisplay.first_name} {studentToDisplay.last_name}</h1>
-            <label htmlFor="delete-student">To delete this studet's record, click here:</label>
+            <h3>To delete this student's record, click here:</h3>
             <button onClick={handleDelete}>Click here to delete</button>
+            <h3>To edit this student's record, click here:</h3>
+            <button onClick={handleEdit}>Click here to edit</button>
             <h2>Accommodations: </h2>
             <h3>(Click on an accommodation to see comments)</h3>
             { studentData ? (
