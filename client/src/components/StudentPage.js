@@ -9,14 +9,13 @@ function StudentPage({ }) {
     const id = parts[2]
     const [studentToDisplay, setStudentToDisplay] = useState({})
     const [studentData, setStudentData] = useState(false)
-    const [refreshPage, setRefreshPage] = useState(false);
     const history = useHistory()
 
     const formik = useFormik({
         initialValues: {
           accommodation: ""
         },
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
         fetch(`http://127.0.0.1:5555/add_accommodation/${id}`, {
             method: "POST",
             headers: {
@@ -26,16 +25,16 @@ function StudentPage({ }) {
             credentials: 'include'
         })
         .then(res => res.json())
-        .then(data => setStudentToDisplay(data)) 
-        setRefreshPage(prevState => !prevState) //isn't resetting accom dropdown
-        alert("Acommodation successfully added!")
+        .then(data => {setStudentToDisplay(data)
+        resetForm() 
+        })
         }
     })
     const formik2 = useFormik({
         initialValues: {
           accommodation: ""
         },
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
         fetch(`http://127.0.0.1:5555/students/${id}`, {
             method: "POST",
             headers: {
@@ -45,9 +44,9 @@ function StudentPage({ }) {
             credentials: 'include'
         })
         .then(res => res.json())
-        .then(data => setStudentToDisplay(data)) 
-        setRefreshPage(prevState => !prevState) //isn't resetting accom dropdown
-        alert("Class successfully added!")
+        .then(data => {setStudentToDisplay(data)
+        resetForm()
+        alert("Class successfully added!")}) 
         }
     })
     useEffect(() => {

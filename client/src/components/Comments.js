@@ -21,7 +21,7 @@ function Comments() {
         initialValues: {
           comment: ""
         },
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
         fetch(`http://127.0.0.1:5555/comments/${studentId}/${accommodationId}`, {
             method: "POST",
             headers: {
@@ -39,7 +39,8 @@ function Comments() {
         })
         .then(data => {
             console.log(data);
-            setAccommodationToDisplay(data.accommodations);
+            setAccommodationToDisplay(data.accommodations)
+            resetForm()
         })
         .catch(error => {
             console.error('Error:', error);

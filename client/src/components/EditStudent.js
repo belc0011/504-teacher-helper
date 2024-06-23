@@ -56,7 +56,7 @@ function EditStudent() {
           grade: "",
         },
         validationSchema: formSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
           fetch(`http://127.0.0.1:5555/students/${id}`, {
             method: "PATCH",
             headers: {
@@ -67,8 +67,9 @@ function EditStudent() {
         })
         .then(res => {
             if (res.ok) {
-                res.json().then(data => setStudentToDisplay(data))
+                res.json().then(data => {setStudentToDisplay(data)
                 history.push('/students')
+                resetForm()})
             }
             else {
                 console.log("error: " + res)

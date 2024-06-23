@@ -9,7 +9,7 @@ function AccommodationSearch() {
         initialValues: {
           accommodation: ""
         },
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
         fetch(`http://127.0.0.1:5555/search_accommodation?description=${formik.values.accommodation}`, {
             method: "GET",
             credentials: 'include'
@@ -24,7 +24,8 @@ function AccommodationSearch() {
         })
         .then((data) => {
             console.log(data)
-            setStudentList(data)})
+            setStudentList(data)
+            resetForm()})
         .catch((error) => {
             console.error(error);
         });

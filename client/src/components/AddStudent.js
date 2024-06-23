@@ -14,7 +14,7 @@ function AddStudent() {
         .required("First name is required"),
         lastName: yup
         .string()
-        .matches(/^[a-zA-Z]+$/, "Names can not contain numbers or special characters")
+        .matches(/^[a-zA-Z\-]+$/, "Names can not contain numbers or special characters")
         .required("Last name is required"),
       });
 
@@ -25,7 +25,7 @@ function AddStudent() {
           grade: "",
         },
         validationSchema: formSchema,
-        onSubmit: (values) => {
+        onSubmit: (values, { resetForm }) => {
           fetch("http://127.0.0.1:5555/students", {
             method: "POST",
             headers: {
@@ -39,7 +39,8 @@ function AddStudent() {
                 res.json().then(
                     data => {console.log(data)
                 alert("Student successfully added!")
-                history.push('/students')
+                resetForm()
+                history.push('/')
             })
             }
             else {
@@ -59,7 +60,11 @@ function AddStudent() {
                         name="firstName"
                         id="first-name" 
                         value={formik.values.firstName} 
-                        onChange={formik.handleChange}/>
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}/>
+                        {formik.touched.firstName && formik.errors.firstName ? (
+                        <p style={{ color: "red" }}>{formik.errors.firstName}</p>
+                        ) : null}
                     </div>
                     <label htmlFor="last-name">Last Name: </label>
                     <div>
@@ -68,7 +73,11 @@ function AddStudent() {
                         name="lastName"
                         id="last-name" 
                         value={formik.values.lastName} 
-                        onChange={formik.handleChange}/>
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}/>
+                        {formik.touched.lastName && formik.errors.lastName ? (
+                        <p style={{ color: "red" }}>{formik.errors.lastName}</p>
+                        ) : null}
                     </div>
                     <label htmlFor="grade">Grade: </label>
                     <div>
