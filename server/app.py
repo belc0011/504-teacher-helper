@@ -147,7 +147,7 @@ class StudentById(Resource):
         else:
             return {'error': 'Unauthorized'}, 401
 
-class AddAccommodation(Resource):
+class Accommodations(Resource):
     def post(self, id):
         request_json = request.get_json()
         if session.get('user_id'):
@@ -168,9 +168,8 @@ class AddAccommodation(Resource):
             return response
         else:
             return {'message': 'Error, unauthorized user'}, 401
-
-class AccommodationSearch(Resource):
-    def get(self):
+    
+    def get(self, id=None):
         if session.get('user_id'):
             user_id = session.get('user_id')
             description = request.args.get('description')
@@ -192,8 +191,9 @@ class AccommodationSearch(Resource):
             return response
         else:
             return {'message': 'Error, unauthorized user'}, 401
+    
 
-class AddComment(Resource):
+class Comments(Resource):
     def post(self, id, aid):
         if session.get('user_id'):
             comment = request.json.get('comment')
@@ -222,9 +222,7 @@ class AddComment(Resource):
             return response
         else:
             return 401
-        
-class JoinTableStudent(Resource):
-    def get(self, id):
+    def get(self, id, aid=None):
         if session.get('user_id'):
             stmt = select(student_accommodation).where(
                 (student_accommodation.c.student_id == id)
@@ -254,6 +252,7 @@ class JoinTableStudent(Resource):
                 return {'message': 'No data'}, 404
         else:
             return 401
+    
 
 
 api.add_resource(Signup, '/signup', endpoint='signup')
@@ -262,10 +261,8 @@ api.add_resource(Logout, '/logout', endpoint='logout')
 api.add_resource(Students, '/students', endpoint='students')
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')
 api.add_resource(StudentById, '/students/<int:id>', endpoint='students/<int:id>')
-api.add_resource(AddAccommodation, '/add_accommodation/<int:id>', endpoint='add_accommodation/<int:id>')
-api.add_resource(AccommodationSearch, '/search_accommodation', endpoint='search_accommodation')
-api.add_resource(AddComment, '/comments/<int:id>/<int:aid>', endpoint='comments/<int:id>/<int:aid>')
-api.add_resource(JoinTableStudent, '/join_table_student/<int:id>', endpoint='join_table_student/<int:id>')
+api.add_resource(Accommodations, '/accommodations/<int:id>', endpoint='accommodations/<int:id>')
+api.add_resource(Comments, '/comments/<int:id>/<int:aid>', endpoint='comments/<int:id>/<int:aid>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=False)

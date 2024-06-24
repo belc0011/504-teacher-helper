@@ -10,7 +10,7 @@ function AccommodationSearch() {
           accommodation: ""
         },
         onSubmit: (values, { resetForm }) => {
-        fetch(`http://127.0.0.1:5555/search_accommodation?description=${formik.values.accommodation}`, {
+        fetch(`http://127.0.0.1:5555/accommodations/1?description=${formik.values.accommodation}`, {
             method: "GET",
             credentials: 'include'
             })

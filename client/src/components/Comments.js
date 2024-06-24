@@ -49,7 +49,7 @@ function Comments() {
 })
     useEffect(() => {
         
-        fetch(`http://127.0.0.1:5555/join_table_student/${studentId}`, {
+        fetch(`http://127.0.0.1:5555/comments/${studentId}/${studentId}`, {
             method: "GET",
             credentials: 'include'
             })
